@@ -162,7 +162,7 @@ function step(prev: ScenarioState, id: ScenarioId, channel: ChannelId, action: D
       d.audit("Sydkyk", notifiedText(channel) + ". No system changes made.");
       d.say(
         "bot",
-        `${sc.approver.name.split(" ")[0]} declined this request: “${action.reason}”. Nothing was changed. Reply here if you want to adjust it and resend.`,
+        `${sc.approver.name.split(" ")[0]} declined this request: “${action.reason.replace(/[.!?]+$/, "")}.” Nothing was changed. Reply here if you want to adjust it and resend.`,
       );
       return s;
 
