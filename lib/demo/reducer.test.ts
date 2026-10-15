@@ -71,6 +71,11 @@ describe("demoReducer", () => {
     expect(events).toContain("Push notification sent to Mark Santos’s phone");
   });
 
+  it("names Slack in audit events", () => {
+    const state = run([{ type: "channel", channel: "slack" }, { type: "send" }]);
+    expect(state.scenarios.leave.audit[0].event).toBe("Request received via Slack");
+  });
+
   it("settles a scenario that is left mid-execution", () => {
     const state = run([
       { type: "send" },

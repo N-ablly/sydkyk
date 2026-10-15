@@ -1,5 +1,5 @@
 export type ScenarioId = "leave" | "expense" | "access";
-export type ChannelId = "teams" | "gchat" | "mobile";
+export type ChannelId = "teams" | "gchat" | "slack" | "mobile";
 
 /** Where a scenario is in the request → policy → approval → execute → notify flow. */
 export type Stage = "idle" | "thinking" | "review" | "pending" | "executing" | "done";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { CHANNELS } from "@/lib/demo/channels";
+import { CHANNEL_TABS, CHANNELS } from "@/lib/demo/channels";
 import { formatClock } from "@/lib/demo/format";
 import type { ChannelId, ChatMessage, RequestValues, Scenario, ScenarioState } from "@/lib/demo/types";
 import type { Notice } from "@/lib/demo/use-demo";
@@ -56,6 +56,7 @@ function Pair({ k, v }: { k: string; v: string }) {
 export function EmployeePane({ scenario, state, channel, notice, onSend, onSubmit }: Props) {
   const chatRef = useRef<HTMLDivElement>(null);
   const ch = CHANNELS[channel];
+  const tabs = CHANNEL_TABS[channel];
 
   useEffect(() => {
     const el = chatRef.current;
@@ -86,8 +87,10 @@ export function EmployeePane({ scenario, state, channel, notice, onSend, onSubmi
         )}
         <div className="body">
           <span className="meta">
-            {me ? scenario.employee.name : "Sydkyk"}
-            {!me && channel === "gchat" && <span className="appbadge">App</span>} · {m.time}
+            <span className="nm">{me ? scenario.employee.name : "Sydkyk"}</span>
+            {!me && (channel === "gchat" || channel === "slack") && <span className="appbadge">App</span>}
+            {channel === "slack" ? " " : " · "}
+            {m.time}
           </span>
           {inner}
         </div>
@@ -110,11 +113,11 @@ export function EmployeePane({ scenario, state, channel, notice, onSend, onSubmi
           </div>
           <span className="tag">{ch.employeeTag}</span>
         </div>
-        <div className="chtabs" aria-hidden="true">
-          <b>Chat</b>
-          <span>Requests</span>
-          <span>About</span>
-        </div>
+        {tabs && (
+          <div className="chtabs" aria-hidden="true">
+            {tabs.items.map((item, i) => (i === tabs.active ? <b key={item}>{item}</b> : <span key={item}>{item}</span>))}
+          </div>
+        )}
         <div className="chat" ref={chatRef}>
           {state.chat.length === 0 ? (
             <div className="empty">

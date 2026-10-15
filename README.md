@@ -14,7 +14,7 @@ Three use cases, each running the same flow (request → policy check → human 
 | Reimbursement | ₱3,500 client dinner with receipt | Line manager | Receipt OCR, NetSuite |
 | IT access | Salesforce access for a new role | App owner | Entra ID, Salesforce, ServiceNow |
 
-Each one can be shown in three channels: **Microsoft Teams**, **Google Chat** or the **Sydkyk mobile app**. In the mobile app view, both people use phones and get push notifications.
+Each one can be shown in four channels: **Microsoft Teams**, **Google Chat**, **Slack** or the **Sydkyk mobile app**. In the mobile app view, both people use phones and get push notifications.
 
 ## Run locally
 
@@ -41,7 +41,7 @@ app/
   globals.css           brand tokens (light + dark) and all component styles
 components/demo/
   demo.tsx              header, scenario and channel switchers, presenter guide
-  employee-pane.tsx     chat view (Teams / Google Chat / phone)
+  employee-pane.tsx     chat view (Teams / Google Chat / Slack / phone)
   approver-pane.tsx     approval console, execution steps, audit trail
   request-forms.tsx     the editable request card for each use case
   chrome.tsx            mascot, phone status bar, tab bar, push notification
