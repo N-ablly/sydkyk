@@ -202,7 +202,8 @@ label.f { display: grid; gap: 4px; font-size: 12.5px; color: var(--muted); min-w
 .ch-mobile .msg .body { max-width: 92%; }
 .ch-mobile .composer { padding: 10px 12px; }
 .ch-mobile .inputrow input { border-radius: 99px; }
-.ch-mobile #console { flex: 1; min-height: 0; overflow-y: auto; padding: 12px; }
+/* Block layout so the request card keeps its full height and the phone screen scrolls to the Approve button. */
+.ch-mobile #console { display: block; flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding: 12px; }
 .ch-mobile .req-b { padding: 12px; }
 .ch-mobile .kv { grid-template-columns: minmax(84px, auto) minmax(0, 1fr); font-size: 13px; }
 .ch-mobile .actions .btn { flex: 1; text-align: center; }
