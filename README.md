@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sydkyk
 
-## Getting Started
+Clickable demo of Sydkyk, the autonomous AI teammate for HR, IT and Finance.
 
-First, run the development server:
+This is a **front-end-only demo**. All data is fictional sample data, and no chat, HR, finance or identity systems are connected.
+
+## What the demo shows
+
+Three use cases, each running the same flow (request → policy check → human approval → execute → notify):
+
+| Use case | Employee asks | Approver | Systems |
+| --- | --- | --- | --- |
+| Leave request | Leave balances + vacation request | Line manager | Darwinbox, Outlook calendar |
+| Reimbursement | ₱3,500 client dinner with receipt | Line manager | Receipt OCR, NetSuite |
+| IT access | Salesforce access for a new role | App owner | Entra ID, Salesforce, ServiceNow |
+
+Each one can be shown in three channels: **Microsoft Teams**, **Google Chat** or the **Sydkyk mobile app**. In the mobile app view, both people use phones and get push notifications.
+
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm test          # reducer + date logic (Vitest)
+npm run lint
+npm run typecheck
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project structure
 
-## Learn More
+```
+app/
+  layout.tsx            fonts (Manrope, DM Sans, JetBrains Mono) and metadata
+  page.tsx              renders the demo
+  globals.css           brand tokens (light + dark) and all component styles
+components/demo/
+  demo.tsx              header, scenario and channel switchers, presenter guide
+  employee-pane.tsx     chat view (Teams / Google Chat / phone)
+  approver-pane.tsx     approval console, execution steps, audit trail
+  request-forms.tsx     the editable request card for each use case
+  chrome.tsx            mascot, phone status bar, tab bar, push notification
+lib/demo/
+  types.ts              domain types (scenarios, stages, audit entries)
+  scenarios.ts          the three use cases: copy, policy checks, execution steps
+  channels.ts           channel labels
+  reducer.ts            the whole flow as a pure reducer (tested)
+  use-demo.ts           timers, push notifications, remembered tab/channel
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Adding a use case
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Add its values type to `lib/demo/types.ts` and its id to `ScenarioId`.
+2. Define the scenario in `lib/demo/scenarios.ts` and add it to `SCENARIOS` and `SCENARIO_ORDER`.
+3. Add its request card to `FORMS` in `components/demo/request-forms.tsx`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Path to the real product
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The demo keeps the flow logic in `lib/demo/reducer.ts`, separate from the UI. When the backend arrives, the reducer's actions map onto API calls (`send` → conversation endpoint, `submit` → create request, `approve` / `decline` → approval decision), and the audit trail comes from the server's append-only audit log instead of being simulated.
