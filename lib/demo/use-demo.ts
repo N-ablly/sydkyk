@@ -33,7 +33,7 @@ function writeStorage(key: string, value: string) {
 }
 
 /** Demo state plus timed side effects: typing delay, execution steps and simulated push notifications. */
-export function useDemo() {
+export function useDemo(initialScenario?: ScenarioId) {
   const [state, dispatch] = useReducer(demoReducer, undefined, initialDemoState);
   const [notices, setNotices] = useState<Partial<Record<NoticeTarget, Notice>>>({});
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -67,11 +67,12 @@ export function useDemo() {
 
   // Restore the last scenario and channel after hydration so server and client markup match.
   useEffect(() => {
-    const id = readStorage(STORAGE.scenario);
+    // A deep link (/demo?scenario=S04) wins over the remembered scenario.
+    const id = initialScenario ?? readStorage(STORAGE.scenario);
     const ch = readStorage(STORAGE.channel);
     if (isScenarioId(id)) dispatch({ type: "select", id });
     if (isChannelId(ch)) dispatch({ type: "channel", channel: ch });
-  }, []);
+  }, [initialScenario]);
 
   const scenario = SCENARIOS[state.current];
   const current = state.scenarios[state.current];

@@ -7,7 +7,7 @@ import { PERSONAS } from "@/lib/demo/personas";
 import { stepStatus } from "@/lib/demo/reducer";
 import { MODE_LABEL } from "@/lib/demo/scenarios";
 import type { SourceId } from "@/lib/demo/sources.generated";
-import type { ChannelId, Scenario, ScenarioState, StepKey } from "@/lib/demo/types";
+import type { ChannelId, Scenario, ScenarioId, ScenarioState, StepKey } from "@/lib/demo/types";
 import { useDemo } from "@/lib/demo/use-demo";
 import { ApproverPane } from "./approver-pane";
 import { Mascot } from "./chrome";
@@ -54,8 +54,8 @@ function guideFor(sc: Scenario, st: ScenarioState): [string, string] {
   }
 }
 
-export function Demo() {
-  const demo = useDemo();
+export function Demo({ initialScenario }: { initialScenario?: ScenarioId }) {
+  const demo = useDemo(initialScenario);
   const { state, scenario, current } = demo;
   const [source, setSource] = useState<SourceId | null>(null);
   const [tab, setTab] = useState<MobileTab>("employee");

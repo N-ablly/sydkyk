@@ -378,3 +378,56 @@ dialog.drawer::backdrop { background: oklch(.2 .03 260 / .45); }
 .case { border: 1px solid var(--warn); background: var(--warn-soft); border-radius: 10px; padding: 10px 12px; }
 .case .sec-l { color: var(--warn); }
 .log li.y .ev { color: var(--warn); }
+
+/* ---------- Landing, registration and admin pages ---------- */
+.wrap.narrow { max-width: 980px; }
+a.brand { color: inherit; text-decoration: none; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: clamp(18px, 4vw, 32px); display: grid; gap: 16px; min-width: 0; }
+.panel.slim { max-width: 460px; justify-self: center; width: 100%; }
+.ptitle { margin: 0; font: 800 clamp(22px, 3vw, 28px)/1.15 var(--f-display); letter-spacing: -0.02em; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); max-width: 62ch; font-size: 16px; }
+.kicker { margin: 0; color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+.resume { margin: 0; padding: 10px 12px; background: var(--ok-soft); border-radius: var(--r); }
+.resume a, .notice a, .domains a, .empty a { color: var(--accent); }
+
+.landing { display: grid; gap: 28px; }
+.hero { display: grid; gap: 14px; padding-block: clamp(12px, 4vw, 36px) 0; }
+.hero h2 { margin: 0; font: 800 clamp(28px, 4.4vw, 44px)/1.08 var(--f-display); letter-spacing: -0.025em; max-width: 22ch; text-wrap: balance; }
+.cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.btn.big { padding: 12px 20px; font-size: 16px; border-radius: 10px; text-decoration: none; display: inline-block; }
+.domains { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); }
+.dcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 8px; align-content: start; }
+.dcard h3 { margin: 0; font: 700 17px var(--f-display); }
+.dcard p { margin: 0; color: var(--muted); font-size: 13.5px; }
+.dcard ul { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 6px; }
+.dcard li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 14px; }
+
+.lead-form { display: grid; gap: 16px; }
+.lead-form .f { font-size: 13.5px; color: var(--ink); font-weight: 500; }
+.lead-form .f input, .lead-form .f select { font-size: 15px; padding: 9px 11px; }
+.lead-form .f [aria-invalid="true"] { border-color: var(--bad); }
+.lead-form .err { font-weight: 400; }
+.opt { color: var(--muted); font-weight: 400; font-size: 12px; }
+.hint { color: var(--muted); font-size: 12.5px; font-weight: 400; }
+.formerr { margin: 0; padding: 10px 12px; background: var(--bad-soft); border-radius: var(--r); }
+.okmsg { margin: 0; color: var(--ok); }
+.testbanner { margin: 0; padding: 10px 12px; background: var(--warn-soft); border-radius: var(--r); font-size: 13.5px; }
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.interests { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px 16px; }
+.interests legend { font-size: 13.5px; font-weight: 500; margin-bottom: 6px; padding: 0; }
+.check { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
+.check input { width: 18px; height: 18px; accent-color: var(--accent); }
+.notice { display: grid; gap: 10px; padding: 12px 14px; background: var(--sunken); border-radius: var(--r); font-size: 13.5px; }
+.notice p { margin: 0; color: var(--muted); }
+
+.panel.wide { gap: 14px; }
+.admin-h { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 12px; }
+.admin-h .meta { margin: 4px 0 0; }
+.admin-h .btn { text-decoration: none; display: inline-block; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); }
+table.leads { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 900px; }
+.leads th, .leads td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.leads th { font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: var(--sunken); position: sticky; top: 0; }
+.leads td small { display: block; color: var(--muted); }
+.leads td a { color: var(--accent); }
+.leads tbody tr:hover { background: var(--sunken); }
