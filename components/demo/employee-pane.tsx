@@ -6,6 +6,7 @@ import { formatClock } from "@/lib/demo/format";
 import type { ChannelId, ChatMessage, RequestValues, Scenario, ScenarioState } from "@/lib/demo/types";
 import type { Notice } from "@/lib/demo/use-demo";
 import { BotAvatar, PushNotice, StatusBar, TabBar } from "./chrome";
+import { PlatformLogo } from "./platform-logo";
 import { RequestForm } from "./request-forms";
 
 interface Props {
@@ -111,7 +112,10 @@ export function EmployeePane({ scenario, state, channel, notice, onSend, onSubmi
               Chat with {scenario.employee.name} · {scenario.employee.role}
             </span>
           </div>
-          <span className="tag">{ch.employeeTag}</span>
+          <span className="tag">
+            <PlatformLogo channel={channel} size={14} />
+            {ch.employeeTag}
+          </span>
         </div>
         {tabs && (
           <div className="chtabs" aria-hidden="true">
@@ -121,6 +125,7 @@ export function EmployeePane({ scenario, state, channel, notice, onSend, onSubmi
         <div className="chat" ref={chatRef}>
           {state.chat.length === 0 ? (
             <div className="empty">
+              <PlatformLogo channel={channel} size={36} />
               <strong>Start a conversation</strong>
               {scenario.employee.name} messages Sydkyk the same way they’d message a coworker.
             </div>

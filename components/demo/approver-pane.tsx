@@ -6,6 +6,7 @@ import { firstName, formatClock } from "@/lib/demo/format";
 import type { ChannelId, Scenario, ScenarioState } from "@/lib/demo/types";
 import type { Notice } from "@/lib/demo/use-demo";
 import { PushNotice, StatusBar, SystemsChain, TabBar } from "./chrome";
+import { PlatformLogo } from "./platform-logo";
 
 interface Props {
   scenario: Scenario;
@@ -129,7 +130,7 @@ export function ApproverPane({ scenario, state, channel, notice, onApprove, onDe
               <strong>No requests waiting</strong>
               When {firstName(scenario.employee.name)} submits, the request shows up here with policy checks already done.
               <div style={{ marginTop: 8 }}>
-                <SystemsChain systems={systems} />
+                <SystemsChain systems={systems} lead={<PlatformLogo channel={channel} size={14} />} />
               </div>
             </div>
           ) : (
@@ -162,7 +163,7 @@ export function ApproverPane({ scenario, state, channel, notice, onApprove, onDe
                 </div>
                 <div>
                   <p className="sec-l">Systems touched</p>
-                  <SystemsChain systems={systems} />
+                  <SystemsChain systems={systems} lead={<PlatformLogo channel={channel} size={14} />} />
                 </div>
                 {state.stage === "pending" && (
                   <Decision scenario={scenario} onApprove={onApprove} onDecline={onDecline} />

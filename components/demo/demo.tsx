@@ -8,6 +8,7 @@ import type { ChannelId, Scenario, ScenarioState } from "@/lib/demo/types";
 import { useDemo } from "@/lib/demo/use-demo";
 import { ApproverPane } from "./approver-pane";
 import { Mascot } from "./chrome";
+import { PlatformLogo } from "./platform-logo";
 import { EmployeePane } from "./employee-pane";
 
 const STEPS = ["Request", "Policy check", "Approval", "Execute", "Notify"];
@@ -115,6 +116,7 @@ export function Demo() {
               aria-pressed={id === state.channel}
               onClick={() => demo.setChannel(id)}
             >
+              <PlatformLogo channel={id} />
               {CHANNELS[id].label}
             </button>
           ))}

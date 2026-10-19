@@ -1,0 +1,32 @@
+[
+  {
+    "schedule_id": "DAY-MF",
+    "weekdays": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "start": "09:00",
+    "end": "18:00",
+    "unpaid_break_minutes": 60,
+    "timezone": "Asia/Manila"
+  },
+  {
+    "schedule_id": "NIGHT-MF",
+    "weekdays": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "start": "22:00",
+    "end": "07:00",
+    "crosses_midnight": true,
+    "unpaid_break_minutes": 60,
+    "timezone": "Asia/Manila",
+    "leave_charge_date": "shift_start_local_date"
+  }
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "employee_id": "E0001",
+    "display_name": "Ana Reyes",
+    "roles": [
+      "employee"
+    ],
+    "scope": "self"
+  },
+  {
+    "employee_id": "E0002",
+    "display_name": "Mark Santos",
+    "roles": [
+      "employee",
+      "manager"
+    ],
+    "scope": "current_direct_reports_workflow_only"
+  },
+  {
+    "employee_id": "E0003",
+    "display_name": "Ben Cruz",
+    "roles": [
+      "employee"
+    ],
+    "scope": "self"
+  },
+  {
+    "employee_id": "E0004",
+    "display_name": "Liza Garcia",
+    "roles": [
+      "employee",
+      "employee_relations"
+    ],
+    "case_grants": [
+      "ER-DEMO-001"
+    ]
+  },
+  {
+    "employee_id": "E0005",
+    "display_name": "Paolo Ramos",
+    "roles": [
+      "employee",
+      "app_owner"
+    ],
+    "app_grants": [
+      "PROJECTHUB",
+      "DESIGNDESK"
+    ]
+  },
+  {
+    "employee_id": "E0006",
+    "display_name": "Mia Flores",
+    "roles": [
+      "employee",
+      "finance_reviewer"
+    ],
+    "request_grants": [
+      "EXP-DEMO-001",
+      "EXP-DEMO-002",
+      "INV-DEMO-001"
+    ]
+  },
+  {
+    "employee_id": "E0007",
+    "display_name": "Nico Mendoza",
+    "roles": [
+      "employee",
+      "hr_reviewer"
+    ],
+    "request_grants": [
+      "COE-DEMO-001",
+      "ONB-DEMO-001"
+    ]
+  },
+  {
+    "employee_id": "E0008",
+    "display_name": "Carla Lim",
+    "roles": [
+      "employee",
+      "workplace"
+    ],
+    "office_grants": [
+      "Makati"
+    ]
+  }
+]

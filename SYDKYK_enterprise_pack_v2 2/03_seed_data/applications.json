@@ -1,0 +1,42 @@
+[
+  {
+    "app_id": "PROJECTHUB",
+    "name": "ProjectHub",
+    "roles": [
+      "Contributor"
+    ],
+    "available_seats": 2,
+    "approvers": [
+      "current_manager",
+      "E0005"
+    ],
+    "duration_days": 30
+  },
+  {
+    "app_id": "DESIGNDESK",
+    "name": "DesignDesk",
+    "roles": [
+      "Viewer"
+    ],
+    "available_seats": 0,
+    "approvers": [
+      "current_manager",
+      "E0005"
+    ],
+    "duration_days": 30
+  },
+  {
+    "app_id": "FIN-ADMIN",
+    "name": "Finance Admin",
+    "roles": [
+      "Administrator"
+    ],
+    "available_seats": 0,
+    "approvers": [
+      "current_manager",
+      "security"
+    ],
+    "duration_days": 0,
+    "mode": "handoff_only"
+  }
+]

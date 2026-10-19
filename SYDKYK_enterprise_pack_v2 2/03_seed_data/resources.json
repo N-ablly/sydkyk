@@ -1,0 +1,50 @@
+{
+  "desks": [
+    {
+      "resource_id": "MKT-D01",
+      "office": "Makati",
+      "capacity": 1
+    }
+  ],
+  "rooms": [
+    {
+      "resource_id": "MKT-R01",
+      "office": "Makati",
+      "capacity": 6
+    }
+  ],
+  "bookings": [],
+  "courses": [
+    {
+      "course_id": "SEC101",
+      "name": "Security Basics",
+      "seats": 50,
+      "date": "2026-10-20",
+      "start": "10:00",
+      "timezone": "Asia/Manila"
+    },
+    {
+      "course_id": "HR101",
+      "name": "New Joiner Orientation",
+      "seats": 30,
+      "date": "2026-10-19",
+      "start": "09:00",
+      "timezone": "Asia/Manila"
+    },
+    {
+      "course_id": "LEAD201",
+      "name": "Manager Essentials",
+      "seats": 20,
+      "date": "2026-10-22",
+      "start": "13:00",
+      "timezone": "Asia/Manila"
+    }
+  ],
+  "service_status": [
+    {
+      "service": "VPN",
+      "status": "operational",
+      "as_of": "2026-10-15T01:00:00Z"
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { Notice } from "@/lib/demo/use-demo";
 
 export function Mascot({ small = false }: { small?: boolean }) {
@@ -59,12 +60,16 @@ export function PushNotice({ notice }: { notice?: Notice }) {
   );
 }
 
-export function SystemsChain({ systems }: { systems: string[] }) {
+/** `lead` is an optional icon shown inside the first chip (the chat channel). */
+export function SystemsChain({ systems, lead }: { systems: string[]; lead?: ReactNode }) {
   return (
     <div className="systems">
       {systems.map((system, i) => (
         <span key={system} style={{ display: "contents" }}>
-          <span className="sys">{system}</span>
+          <span className="sys">
+            {i === 0 && lead}
+            {system}
+          </span>
           {i < systems.length - 1 && <span className="arrow">→</span>}
         </span>
       ))}
