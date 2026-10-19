@@ -1,6 +1,7 @@
 import { CHANNELS } from "./channels";
 import { formatClock } from "./format";
 import { PERSONAS } from "./personas";
+import type { AskResult } from "@/lib/rag/types";
 import { SCENARIOS } from "./scenarios";
 import type {
   AuditEntry,
@@ -25,6 +26,8 @@ export type DemoAction =
   | { type: "finish" }
   | { type: "branchAsk"; index: number }
   | { type: "branchReply"; index: number }
+  | { type: "freeAsk"; scenario: ScenarioId; text: string }
+  | { type: "freeReply"; scenario: ScenarioId; result: AskResult }
   | { type: "reset" };
 
 /** The demo clock is frozen at Thu Oct 15, 2026 09:00 Manila time and only moves with simulated activity. */
@@ -256,9 +259,53 @@ function settle(prev: ScenarioState, id: ScenarioId, channel: ChannelId): Scenar
   return s;
 }
 
+const TONE: Record<AskResult["outcome"], ChatMessage["tone"]> = {
+  answer: undefined,
+  clarify: "info",
+  handoff: "hold",
+  unavailable: "hold",
+  denied: "deny",
+};
+
+/** Free-text questions (Phase 2). They never change the scripted request; they only add chat and audit. */
+function freeText(prev: ScenarioState, id: ScenarioId, channel: ChannelId, action: DemoAction): ScenarioState {
+  const d = draft(prev);
+  const { s } = d;
+  const who = PERSONAS[SCENARIOS[id].requester].name;
+  if (action.type === "freeAsk") {
+    if (s.typing || s.stage === "thinking") return prev;
+    d.tick(15);
+    d.say({ from: "employee", kind: "text", text: action.text });
+    d.audit(who, `Asked via ${CHANNELS[channel].label} (free text)`);
+    s.typing = true;
+    return s;
+  }
+  if (action.type === "freeReply") {
+    if (!s.typing) return prev;
+    const r = action.result;
+    d.tick(4);
+    d.say({ from: "bot", kind: "text", text: r.answer, refs: r.sources, by: r.by, tone: TONE[r.outcome] });
+    const cited = Array.from(new Set(r.sources.map((x) => x.documentId))).join(", ");
+    const event =
+      r.by === "guard" && r.outcome === "denied"
+        ? "Denied before lookup (another person's data)"
+        : `${r.by === "model" ? "Answered by Claude" : "Answered by rule"} · ${r.outcome}${cited ? ` · cited ${cited}` : " · no source cited"}`;
+    d.audit("Sydkyk", event, r.outcome === "denied" ? "bad" : r.outcome === "answer" ? "ok" : "warn");
+    s.typing = false;
+    return s;
+  }
+  return prev;
+}
+
 export function demoReducer(state: DemoState, action: DemoAction): DemoState {
   const { current, channel } = state;
   switch (action.type) {
+    case "freeAsk":
+    case "freeReply": {
+      const next = freeText(state.scenarios[action.scenario], action.scenario, channel, action);
+      if (next === state.scenarios[action.scenario]) return state;
+      return { ...state, scenarios: { ...state.scenarios, [action.scenario]: next } };
+    }
     case "select":
       if (action.id === current) return state;
       return {

@@ -5,6 +5,7 @@ import { isChannelId } from "./channels";
 import { PERSONAS } from "./personas";
 import { demoReducer, initialDemoState } from "./reducer";
 import { SCENARIOS, isScenarioId } from "./scenarios";
+import type { AskResult } from "@/lib/rag/types";
 import type { ChannelId, ScenarioId } from "./types";
 
 export type NoticeTarget = "employee" | "approver";
@@ -151,5 +152,27 @@ export function useDemo(initialScenario?: ScenarioId) {
     later(() => dispatch({ type: "branchReply", index }), 900);
   };
 
-  return { state, scenario, current, notices, select, setChannel, reset, send, confirm, approve, reject, branch };
+  /** Free-text question answered by /api/ask (Claude over permitted SYDKYK policies and the persona's own record). */
+  const ask = async (text: string) => {
+    const id = state.current;
+    if (current.typing || current.stage === "thinking") return;
+    dispatch({ type: "freeAsk", scenario: id, text });
+    let result: AskResult;
+    try {
+      const res = await fetch("/api/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: text, scenario: id }),
+      });
+      const body = await res.json().catch(() => ({}));
+      result = res.ok
+        ? (body as AskResult)
+        : { outcome: "unavailable", answer: body.error ?? "I couldn’t answer that just now. Try again shortly.", sources: [], by: "guard" };
+    } catch {
+      result = { outcome: "unavailable", answer: "You seem to be offline. Check your connection and try again.", sources: [], by: "guard" };
+    }
+    dispatch({ type: "freeReply", scenario: id, result });
+  };
+
+  return { state, scenario, current, notices, select, setChannel, reset, send, confirm, approve, reject, branch, ask };
 }

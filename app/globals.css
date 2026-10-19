@@ -431,3 +431,6 @@ table.leads { border-collapse: collapse; width: 100%; font-size: 13.5px; min-wid
 .leads td small { display: block; color: var(--muted); }
 .leads td a { color: var(--accent); }
 .leads tbody tr:hover { background: var(--sunken); }
+.aimark { font-size: 10.5px; color: var(--muted); }
+.inputrow .btn { flex: none; }
+.inputrow input:not(:disabled) { color: var(--ink); background: var(--surface); }

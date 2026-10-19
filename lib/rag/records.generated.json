@@ -1,0 +1,434 @@
+{
+ "E0001": {
+  "employee_id": "E0001",
+  "name": "Ana Reyes",
+  "job_title": "Customer Success Specialist",
+  "department": "Customer Success",
+  "manager": "Mark Santos",
+  "office": "Makati",
+  "hire_date": "2022-03-15",
+  "employment_status": "active",
+  "employment_type": "regular",
+  "schedule": "DAY-MF",
+  "work_arrangement": "office",
+  "leave_balances_sprout": {
+   "vacation": {
+    "available": 12.0,
+    "allocation": "15",
+    "taken": "3",
+    "eligibility": "company_demo_eligible"
+   },
+   "sick": {
+    "available": 8.0,
+    "allocation": "10",
+    "taken": "2",
+    "eligibility": "company_demo_eligible"
+   },
+   "emergency": {
+    "available": 3.0,
+    "allocation": "3",
+    "taken": "0",
+    "eligibility": "company_demo_eligible"
+   }
+  },
+  "payslip_adp": {
+   "payslip_id": "PAY-20261015-E0001",
+   "pay_date": "2026-10-15",
+   "period": "2026-10-01 to 2026-10-15",
+   "currency": "PHP",
+   "gross": "30000",
+   "deductions_sample": "3000.0",
+   "attendance_adjustment": "0",
+   "net": "27000.0"
+  },
+  "assigned_asset": {
+   "asset_id": "ASSET-E0001",
+   "type": "Laptop",
+   "model": "DemoBook 14"
+  }
+ },
+ "E0002": {
+  "employee_id": "E0002",
+  "name": "Mark Santos",
+  "job_title": "Manager Customer Success",
+  "department": "Customer Success",
+  "manager": null,
+  "office": "Makati",
+  "hire_date": "2019-01-27",
+  "employment_status": "active",
+  "employment_type": "regular",
+  "schedule": "DAY-MF",
+  "work_arrangement": "office",
+  "leave_balances_sprout": {
+   "vacation": {
+    "available": 13.0,
+    "allocation": "15",
+    "taken": "2",
+    "eligibility": "company_demo_eligible"
+   },
+   "sick": {
+    "available": 8.0,
+    "allocation": "10",
+    "taken": "2",
+    "eligibility": "company_demo_eligible"
+   },
+   "emergency": {
+    "available": 3.0,
+    "allocation": "3",
+    "taken": "0",
+    "eligibility": "company_demo_eligible"
+   }
+  },
+  "payslip_adp": {
+   "payslip_id": "PAY-20261015-E0002",
+   "pay_date": "2026-10-15",
+   "period": "2026-10-01 to 2026-10-15",
+   "currency": "PHP",
+   "gross": "19000",
+   "deductions_sample": "1900.0",
+   "attendance_adjustment": "0",
+   "net": "17100.0"
+  },
+  "assigned_asset": {
+   "asset_id": "ASSET-E0002",
+   "type": "Laptop",
+   "model": "DemoBook 14"
+  }
+ },
+ "E0003": {
+  "employee_id": "E0003",
+  "name": "Ben Cruz",
+  "job_title": "Service Specialist",
+  "department": "Engineering",
+  "manager": "Mark Santos",
+  "office": "Makati",
+  "hire_date": "2019-02-09",
+  "employment_status": "active",
+  "employment_type": "regular",
+  "schedule": "DAY-MF",
+  "work_arrangement": "hybrid",
+  "leave_balances_sprout": {
+   "vacation": {
+    "available": 1.0,
+    "allocation": "15",
+    "taken": "14",
+    "eligibility": "company_demo_eligible"
+   },
+   "sick": {
+    "available": 8.0,
+    "allocation": "10",
+    "taken": "2",
+    "eligibility": "company_demo_eligible"
+   },
+   "emergency": {
+    "available": 3.0,
+    "allocation": "3",
+    "taken": "0",
+    "eligibility": "company_demo_eligible"
+   }
+  },
+  "payslip_adp": {
+   "payslip_id": "PAY-20261015-E0003",
+   "pay_date": "2026-10-15",
+   "period": "2026-10-01 to 2026-10-15",
+   "currency": "PHP",
+   "gross": "19500",
+   "deductions_sample": "1950.0",
+   "attendance_adjustment": "0",
+   "net": "17550.0"
+  },
+  "assigned_asset": {
+   "asset_id": "ASSET-E0003",
+   "type": "Laptop",
+   "model": "DemoBook 14"
+  }
+ },
+ "E0004": {
+  "employee_id": "E0004",
+  "name": "Liza Garcia",
+  "job_title": "Employee Relations Specialist",
+  "department": "HR",
+  "manager": "Mark Santos",
+  "office": "Makati",
+  "hire_date": "2019-02-22",
+  "employment_status": "active",
+  "employment_type": "regular",
+  "schedule": "DAY-MF",
+  "work_arrangement": "office",
+  "leave_balances_sprout": {
+   "vacation": {
+    "available": 11.0,
+    "allocation": "15",
+    "taken": "4",
+    "eligibility": "company_demo_eligible"
+   },
+   "sick": {
+    "available": 8.0,
+    "allocation": "10",
+    "taken": "2",
+    "eligibility": "company_demo_eligible"
+   },
+   "emergency": {
+    "available": 3.0,
+    "allocation": "3",
+    "taken": "0",
+    "eligibility": "company_demo_eligible"
+   }
+  },
+  "payslip_adp": {
+   "payslip_id": "PAY-20261015-E0004",
+   "pay_date": "2026-10-15",
+   "period": "2026-10-01 to 2026-10-15",
+   "currency": "PHP",
+   "gross": "20000",
+   "deductions_sample": "2000.0",
+   "attendance_adjustment": "0",
+   "net": "18000.0"
+  },
+  "assigned_asset": {
+   "asset_id": "ASSET-E0004",
+   "type": "Laptop",
+   "model": "DemoBook 14"
+  }
+ },
+ "E0005": {
+  "employee_id": "E0005",
+  "name": "Paolo Ramos",
+  "job_title": "IT Application Owner",
+  "department": "IT",
+  "manager": "Mark Santos",
+  "office": "Makati",
+  "hire_date": "2019-03-07",
+  "employment_status": "active",
+  "employment_type": "regular",
+  "schedule": "DAY-MF",
+  "work_arrangement": "remote",
+  "leave_balances_sprout": {
+   "vacation": {
+    "available": 10.0,
+    "allocation": "15",
+    "taken": "5",
+    "eligibility": "company_demo_eligible"
+   },
+   "sick": {
+    "available": 8.0,
+    "allocation": "10",
+    "taken": "2",
+    "eligibility": "company_demo_eligible"
+   },
+   "emergency": {
+    "available": 3.0,
+    "allocation": "3",
+    "taken": "0",
+    "eligibility": "company_demo_eligible"
+   }
+  },
+  "payslip_adp": {
+   "payslip_id": "PAY-20261015-E0005",
+   "pay_date": "2026-10-15",
+   "period": "2026-10-01 to 2026-10-15",
+   "currency": "PHP",
+   "gross": "20500",
+   "deductions_sample": "2050.0",
+   "attendance_adjustment": "0",
+   "net": "18450.0"
+  },
+  "assigned_asset": {
+   "asset_id": "ASSET-E0005",
+   "type": "Laptop",
+   "model": "DemoBook 14"
+  }
+ },
+ "E0006": {
+  "employee_id": "E0006",
+  "name": "Mia Flores",
+  "job_title": "Finance Reviewer",
+  "department": "Finance",
+  "manager": "Mark Santos",
+  "office": "Makati",
+  "hire_date": "2019-03-20",
+  "employment_status": "active",
+  "employment_type": "regular",
+  "schedule": "DAY-MF",
+  "work_arrangement": "hybrid",
+  "leave_balances_sprout": {
+   "vacation": {
+    "available": 9.0,
+    "allocation": "15",
+    "taken": "6",
+    "eligibility": "company_demo_eligible"
+   },
+   "sick": {
+    "available": 8.0,
+    "allocation": "10",
+    "taken": "2",
+    "eligibility": "company_demo_eligible"
+   },
+   "emergency": {
+    "available": 3.0,
+    "allocation": "3",
+    "taken": "0",
+    "eligibility": "company_demo_eligible"
+   }
+  },
+  "payslip_adp": {
+   "payslip_id": "PAY-20261015-E0006",
+   "pay_date": "2026-10-15",
+   "period": "2026-10-01 to 2026-10-15",
+   "currency": "PHP",
+   "gross": "21000",
+   "deductions_sample": "2100.0",
+   "attendance_adjustment": "0",
+   "net": "18900.0"
+  },
+  "assigned_asset": {
+   "asset_id": "ASSET-E0006",
+   "type": "Laptop",
+   "model": "DemoBook 14"
+  }
+ },
+ "E0007": {
+  "employee_id": "E0007",
+  "name": "Nico Mendoza",
+  "job_title": "People Operations Reviewer",
+  "department": "HR",
+  "manager": "Mark Santos",
+  "office": "Makati",
+  "hire_date": "2019-04-02",
+  "employment_status": "active",
+  "employment_type": "regular",
+  "schedule": "DAY-MF",
+  "work_arrangement": "office",
+  "leave_balances_sprout": {
+   "vacation": {
+    "available": 8.0,
+    "allocation": "15",
+    "taken": "7",
+    "eligibility": "company_demo_eligible"
+   },
+   "sick": {
+    "available": 8.0,
+    "allocation": "10",
+    "taken": "2",
+    "eligibility": "company_demo_eligible"
+   },
+   "emergency": {
+    "available": 3.0,
+    "allocation": "3",
+    "taken": "0",
+    "eligibility": "company_demo_eligible"
+   }
+  },
+  "payslip_adp": {
+   "payslip_id": "PAY-20261015-E0007",
+   "pay_date": "2026-10-15",
+   "period": "2026-10-01 to 2026-10-15",
+   "currency": "PHP",
+   "gross": "21500",
+   "deductions_sample": "2150.0",
+   "attendance_adjustment": "0",
+   "net": "19350.0"
+  },
+  "assigned_asset": {
+   "asset_id": "ASSET-E0007",
+   "type": "Laptop",
+   "model": "DemoBook 14"
+  }
+ },
+ "E0008": {
+  "employee_id": "E0008",
+  "name": "Carla Lim",
+  "job_title": "Workplace Coordinator",
+  "department": "Workplace",
+  "manager": "Mark Santos",
+  "office": "Makati",
+  "hire_date": "2019-04-15",
+  "employment_status": "active",
+  "employment_type": "regular",
+  "schedule": "DAY-MF",
+  "work_arrangement": "office",
+  "leave_balances_sprout": {
+   "vacation": {
+    "available": 15.0,
+    "allocation": "15",
+    "taken": "0",
+    "eligibility": "company_demo_eligible"
+   },
+   "sick": {
+    "available": 8.0,
+    "allocation": "10",
+    "taken": "2",
+    "eligibility": "company_demo_eligible"
+   },
+   "emergency": {
+    "available": 3.0,
+    "allocation": "3",
+    "taken": "0",
+    "eligibility": "company_demo_eligible"
+   }
+  },
+  "payslip_adp": {
+   "payslip_id": "PAY-20261015-E0008",
+   "pay_date": "2026-10-15",
+   "period": "2026-10-01 to 2026-10-15",
+   "currency": "PHP",
+   "gross": "22000",
+   "deductions_sample": "2200.0",
+   "attendance_adjustment": "0",
+   "net": "19800.0"
+  },
+  "assigned_asset": {
+   "asset_id": "ASSET-E0008",
+   "type": "Laptop",
+   "model": "DemoBook 14"
+  }
+ },
+ "E0010": {
+  "employee_id": "E0010",
+  "name": "Jose Santos",
+  "job_title": "Service Specialist",
+  "department": "Customer Success",
+  "manager": "Mark Santos",
+  "office": "Makati",
+  "hire_date": "2026-10-19",
+  "employment_status": "preboarding",
+  "employment_type": "probationary",
+  "schedule": "DAY-MF",
+  "work_arrangement": "remote",
+  "leave_balances_sprout": {
+   "vacation": {
+    "available": null,
+    "allocation": "",
+    "taken": "",
+    "eligibility": "hr_review"
+   },
+   "sick": {
+    "available": null,
+    "allocation": "",
+    "taken": "",
+    "eligibility": "hr_review"
+   },
+   "emergency": {
+    "available": null,
+    "allocation": "",
+    "taken": "",
+    "eligibility": "hr_review"
+   }
+  },
+  "payslip_adp": {
+   "payslip_id": "PAY-20261015-E0010",
+   "pay_date": "2026-10-15",
+   "period": "2026-10-01 to 2026-10-15",
+   "currency": "PHP",
+   "gross": "23000",
+   "deductions_sample": "2300.0",
+   "attendance_adjustment": "0",
+   "net": "20700.0"
+  },
+  "assigned_asset": {
+   "asset_id": "ASSET-E0010",
+   "type": "Laptop",
+   "model": "DemoBook 14"
+  }
+ }
+}

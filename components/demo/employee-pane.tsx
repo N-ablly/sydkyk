@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { CHANNEL_TABS, CHANNELS } from "@/lib/demo/channels";
 import { formatClock } from "@/lib/demo/format";
 import { PERSONAS } from "@/lib/demo/personas";
-import type { SourceId } from "@/lib/demo/sources.generated";
+import { MAX_QUESTION_CHARS } from "@/lib/rag/guard";
+import type { SourceRef } from "@/lib/rag/types";
 import type { ChannelId, ChatMessage, Scenario, ScenarioState } from "@/lib/demo/types";
 import type { Notice } from "@/lib/demo/use-demo";
 import { BotAvatar, PushNotice, StatusBar, TabBar } from "./chrome";
 import { PlatformLogo } from "./platform-logo";
-import { ArtifactCard, RequestCard, SourceChips } from "./request-card";
+import { ArtifactCard, RequestCard, SourceChips, refsFor } from "./request-card";
 
 interface Props {
   scenario: Scenario;
@@ -20,10 +21,20 @@ interface Props {
   off?: boolean;
   onSend: () => void;
   onConfirm: () => void;
-  onSource: (id: SourceId) => void;
+  onAsk: (text: string) => void;
+  onSource: (ref: SourceRef) => void;
 }
 
-export function EmployeePane({ scenario, state, channel, notice, off, onSend, onConfirm, onSource }: Props) {
+export function EmployeePane({ scenario, state, channel, notice, off, onSend, onConfirm, onAsk, onSource }: Props) {
+  const [draftText, setDraftText] = useState("");
+  const busy = state.typing || state.stage === "thinking";
+  const submitQuestion = (e: FormEvent) => {
+    e.preventDefault();
+    const text = draftText.trim();
+    if (text.length < 2 || busy) return;
+    onAsk(text);
+    setDraftText("");
+  };
   const chatRef = useRef<HTMLDivElement>(null);
   const ch = CHANNELS[channel];
   const tabs = CHANNEL_TABS[channel];
@@ -46,7 +57,12 @@ export function EmployeePane({ scenario, state, channel, notice, off, onSend, on
       inner = (
         <>
           <div className={m.tone ? `bubble tone-${m.tone}` : "bubble"}>{m.text}</div>
-          <SourceChips ids={m.sources} onOpen={onSource} />
+          <SourceChips refs={m.refs ?? refsFor(m.sources)} onOpen={onSource} />
+          {m.by && (
+            <span className="aimark">
+              {m.by === "model" ? "Free-text answer · Claude, from SYDKYK policies · no action taken" : "Answered by a privacy rule · no lookup made"}
+            </span>
+          )}
         </>
       );
     }
@@ -120,19 +136,27 @@ export function EmployeePane({ scenario, state, channel, notice, off, onSend, on
           )}
         </div>
         <div className="composer">
-          {state.stage === "idle" ? (
-            <button className="suggest" type="button" onClick={onSend}>
+          {state.stage === "idle" && (
+            <button className="suggest" type="button" onClick={onSend} disabled={busy}>
               <span>Send</span>
               {scenario.prompt}
             </button>
-          ) : (
-            <div className="inputrow">
-              <input type="text" id="composer-input" disabled placeholder="Message Sydkyk" aria-label="Message Sydkyk" />
-              <button className="btn line" type="button" disabled>
-                Send
-              </button>
-            </div>
           )}
+          <form className="inputrow" onSubmit={submitQuestion}>
+            <input
+              type="text"
+              id="composer-input"
+              value={draftText}
+              maxLength={MAX_QUESTION_CHARS}
+              onChange={(e) => setDraftText(e.target.value)}
+              placeholder={state.stage === "idle" ? "Or ask your own question…" : "Ask a policy question…"}
+              aria-label={`Ask Sydkyk a question as ${requester.name}`}
+              autoComplete="off"
+            />
+            <button className="btn" type="submit" disabled={busy || draftText.trim().length < 2}>
+              Send
+            </button>
+          </form>
         </div>
         <TabBar items={["Chat", "Requests", "Leave", "Me"]} />
       </div>

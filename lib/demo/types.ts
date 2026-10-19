@@ -1,3 +1,4 @@
+import type { SourceRef } from "@/lib/rag/types";
 import type { SourceId } from "./sources.generated";
 
 export type ScenarioId = "S01" | "S02" | "S03" | "S04" | "S05" | "S06" | "S07" | "S08" | "S09" | "S10" | "S11" | "S12";
@@ -130,6 +131,10 @@ export interface ChatMessage {
   time: string;
   as?: PersonaId;
   sources?: SourceId[];
+  /** Sources returned with a free-text answer (any permitted policy section). */
+  refs?: SourceRef[];
+  /** Free-text answer written by Claude ("model") or by a deterministic guard ("guard"). */
+  by?: "model" | "guard";
   tone?: Branch["tone"];
 }
 

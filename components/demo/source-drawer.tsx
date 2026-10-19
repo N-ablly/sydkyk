@@ -2,20 +2,20 @@
 
 import { useEffect, useRef } from "react";
 import { formatDate } from "@/lib/demo/format";
-import { SOURCES, type SourceId } from "@/lib/demo/sources.generated";
+import type { SourceRef } from "@/lib/rag/types";
 
 /** Shows the cited policy section: document ID, version, effective date, owner and the section text. */
-export function SourceDrawer({ id, onClose }: { id: SourceId | null; onClose: () => void }) {
+export function SourceDrawer({ source, onClose }: { source: SourceRef | null; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     const d = ref.current;
     if (!d) return;
-    if (id && !d.open) d.showModal();
-    if (!id && d.open) d.close();
-  }, [id]);
+    if (source && !d.open) d.showModal();
+    if (!source && d.open) d.close();
+  }, [source]);
 
-  const s = id ? SOURCES[id] : null;
+  const s = source;
   return (
     <dialog ref={ref} className="drawer" onClose={onClose} aria-labelledby="src-title">
       {s && (

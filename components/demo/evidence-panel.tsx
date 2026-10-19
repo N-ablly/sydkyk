@@ -2,9 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import { PERSONAS } from "@/lib/demo/personas";
-import type { SourceId } from "@/lib/demo/sources.generated";
+import type { SourceRef } from "@/lib/rag/types";
 import type { Scenario, ScenarioState } from "@/lib/demo/types";
-import { SourceChips } from "./request-card";
+import { SourceChips, refsFor } from "./request-card";
 
 interface Props {
   scenario: Scenario;
@@ -12,7 +12,7 @@ interface Props {
   /** Hidden on narrow screens when another panel tab is selected. */
   off?: boolean;
   onBranch: (index: number) => void;
-  onSource: (id: SourceId) => void;
+  onSource: (ref: SourceRef) => void;
 }
 
 export function EvidencePanel({ scenario, state, off, onBranch, onSource }: Props) {
@@ -52,7 +52,7 @@ export function EvidencePanel({ scenario, state, off, onBranch, onSource }: Prop
         </div>
         <div className="ev-block">
           <p className="sec-l">Sources for this scenario</p>
-          <SourceChips ids={scenario.sources} onOpen={onSource} />
+          <SourceChips refs={refsFor(scenario.sources)} onOpen={onSource} />
         </div>
         <div className="ev-block">
           <p className="sec-l">Outcome evidence</p>

@@ -6,7 +6,7 @@ import { firstName, formatClock } from "@/lib/demo/format";
 import { PERSONAS } from "@/lib/demo/personas";
 import { stepStatus } from "@/lib/demo/reducer";
 import { MODE_LABEL } from "@/lib/demo/scenarios";
-import type { SourceId } from "@/lib/demo/sources.generated";
+import type { SourceRef } from "@/lib/rag/types";
 import type { ChannelId, Scenario, ScenarioId, ScenarioState, StepKey } from "@/lib/demo/types";
 import { useDemo } from "@/lib/demo/use-demo";
 import { ApproverPane } from "./approver-pane";
@@ -57,7 +57,7 @@ function guideFor(sc: Scenario, st: ScenarioState): [string, string] {
 export function Demo({ initialScenario }: { initialScenario?: ScenarioId }) {
   const demo = useDemo(initialScenario);
   const { state, scenario, current } = demo;
-  const [source, setSource] = useState<SourceId | null>(null);
+  const [source, setSource] = useState<SourceRef | null>(null);
   const [tab, setTab] = useState<MobileTab>("employee");
   const [label, text] = guideFor(scenario, current);
   const requester = PERSONAS[scenario.requester];
@@ -159,6 +159,7 @@ export function Demo({ initialScenario }: { initialScenario?: ScenarioId }) {
               off={tab !== "employee"}
               onSend={demo.send}
               onConfirm={demo.confirm}
+              onAsk={demo.ask}
               onSource={setSource}
             />
             <ApproverPane
@@ -181,7 +182,7 @@ export function Demo({ initialScenario }: { initialScenario?: ScenarioId }) {
         Built from the SYDKYK enterprise pack (policies v1.1). Fictional content, not legal advice. Vendor names describe the intended
         integration design only; no vendor API is connected or validated.
       </p>
-      <SourceDrawer id={source} onClose={() => setSource(null)} />
+      <SourceDrawer source={source} onClose={() => setSource(null)} />
     </div>
   );
 }

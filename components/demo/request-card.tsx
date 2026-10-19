@@ -2,16 +2,19 @@
 
 import { Fragment } from "react";
 import { SOURCES, type SourceId } from "@/lib/demo/sources.generated";
+import type { SourceRef } from "@/lib/rag/types";
 import type { Artifact, RequestCard as Card, ScenarioState } from "@/lib/demo/types";
 
-export function SourceChips({ ids, onOpen }: { ids?: SourceId[]; onOpen: (id: SourceId) => void }) {
-  if (!ids?.length) return null;
+/** Scripted citations are stored as IDs; free-text answers carry full source objects. */
+export const refsFor = (ids?: SourceId[]): SourceRef[] => (ids ?? []).map((id) => ({ id, ...SOURCES[id] }));
+
+export function SourceChips({ refs, onOpen }: { refs?: SourceRef[]; onOpen: (ref: SourceRef) => void }) {
+  if (!refs?.length) return null;
   return (
     <div className="srcchips">
-      {ids.map((id) => {
-        const s = SOURCES[id];
+      {refs.map((s) => {
         return (
-          <button key={id} type="button" className="srcchip" onClick={() => onOpen(id)}>
+          <button key={s.id} type="button" className="srcchip" onClick={() => onOpen(s)}>
             <span className="srcdoc">
               {s.documentId} v{s.version}
             </span>
