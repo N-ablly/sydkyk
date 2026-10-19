@@ -49,7 +49,7 @@ function guideFor(sc: Scenario, st: ScenarioState): [string, string] {
       return ["Executing", "Every required approval is recorded. Mock adapters now run each step in order."];
     case "done":
       if (st.rejected) return ["Done", `Rejected with a reason. ${who} was told, and nothing changed in any system.`];
-      if (sc.handoff && !sc.exec.length) return ["Done", `Handed to ${sc.handoff.queue}. A person decides from here; Sydkyk doesn't.`];
+      if (sc.handoff) return ["Done", `Handed to ${sc.handoff.queue}. A person decides from here; Sydkyk doesn't.`];
       return ["Done", "Finished. Check the outcome evidence, then try a guardrail below."];
   }
 }

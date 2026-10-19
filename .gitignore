@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Source content pack (keep local; curated pieces live in content/sydkyk-pack)
+SYDKYK_enterprise_pack_v2*/

@@ -130,7 +130,7 @@ export function ApproverPane({ scenario, state, channel, notice, off, onApprove,
       ? ["wait", "Needs your approval"]
       : state.stage === "executing"
         ? ["run", "Executing (mock)"]
-        : scenario.handoff && !scenario.exec.length
+        : scenario.handoff
           ? ["wait", "Human review pending"]
           : ["ok", "Completed"];
 
