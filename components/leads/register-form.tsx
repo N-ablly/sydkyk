@@ -102,12 +102,16 @@ export function RegisterForm({ idempotencyKey, scenario, testMode, notice, polic
           {err.employee_count_band && <span className="err" id="employee_count_band-err">{err.employee_count_band}</span>}
         </label>
         <label className="f">
-          Phone <span className="opt">optional</span>
+          <span>
+            Phone <span className="opt">optional</span>
+          </span>
           <input name="phone_optional" id="phone_optional" type="tel" autoComplete="tel" maxLength={20} placeholder="+63 917 123 4567" defaultValue={String(v.phone_optional ?? "")} aria-invalid={!!err.phone_optional} aria-describedby={describe("phone_optional")} />
           {err.phone_optional && <span className="err" id="phone_optional-err">{err.phone_optional}</span>}
         </label>
         <label className="f">
-          Your role <span className="opt">optional</span>
+          <span>
+            Your role <span className="opt">optional</span>
+          </span>
           <input name="role_optional" id="role_optional" autoComplete="organization-title" maxLength={100} placeholder="e.g. HR Director" defaultValue={String(v.role_optional ?? "")} aria-invalid={!!err.role_optional} aria-describedby={describe("role_optional")} />
           {err.role_optional && <span className="err" id="role_optional-err">{err.role_optional}</span>}
         </label>
