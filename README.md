@@ -18,6 +18,16 @@ Each one can be shown in four channels: **Microsoft Teams**, **Google Chat**, **
 
 ## Run locally
 
+Copy `.env.example` to `.env.local` and fill in the values, or pull them from Vercel:
+
+```bash
+vercel env pull .env.local --environment=production --scope storm-learning
+```
+
+Secret-type variables come back as `[SENSITIVE]`; paste those two values in yourself.
+Without Supabase and Anthropic keys the demo still runs: sign-up is in test mode and typed questions say AI is off.
+
+
 ```bash
 npm install
 npm run dev
