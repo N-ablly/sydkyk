@@ -1,14 +1,16 @@
 import { CHANNELS } from "./channels";
 import { formatClock } from "./format";
+import { PERSONAS } from "./personas";
 import { SCENARIOS } from "./scenarios";
 import type {
   AuditEntry,
   ChannelId,
   ChatMessage,
   DemoState,
-  RequestValues,
   ScenarioId,
   ScenarioState,
+  Stage,
+  StepKey,
 } from "./types";
 
 export type DemoAction =
@@ -16,42 +18,69 @@ export type DemoAction =
   | { type: "channel"; channel: ChannelId }
   | { type: "send" }
   | { type: "reply" }
-  | { type: "submit"; values: RequestValues }
+  | { type: "confirm" }
   | { type: "approve" }
+  | { type: "reject"; reason: string }
   | { type: "execStep" }
   | { type: "finish" }
-  | { type: "decline"; reason: string }
+  | { type: "branchAsk"; index: number }
+  | { type: "branchReply"; index: number }
   | { type: "reset" };
 
-export function freshScenario(id: ScenarioId): ScenarioState {
+/** The demo clock is frozen at Thu Oct 15, 2026 09:00 Manila time and only moves with simulated activity. */
+export const START_CLOCK = 9 * 3600;
+
+export function freshScenario(): ScenarioState {
   return {
     stage: "idle",
     chat: [],
     audit: [],
-    values: null,
-    rejected: false,
-    reason: "",
+    approvalIdx: 0,
+    decisions: [],
     execDone: 0,
-    clock: SCENARIOS[id].startClock,
+    rejected: false,
+    typing: false,
+    branchesUsed: [],
+    clock: START_CLOCK,
     seq: 0,
   };
 }
 
 export function initialDemoState(): DemoState {
-  return {
-    current: "leave",
-    channel: "teams",
-    scenarios: {
-      leave: freshScenario("leave"),
-      expense: freshScenario("expense"),
-      access: freshScenario("access"),
-    },
-  };
+  const scenarios = Object.fromEntries(Object.keys(SCENARIOS).map((id) => [id, freshScenario()])) as DemoState["scenarios"];
+  return { current: "S01", channel: "mobile", scenarios };
 }
 
-/** A mutable copy of one scenario's state with helpers for the simulated clock, chat and audit log. */
+/** Steps already complete at each stage; the first step not in the set is the active one. */
+const DONE_AT: Record<Stage, StepKey[]> = {
+  idle: [],
+  thinking: [],
+  review: ["request", "policy", "answer", "draft"],
+  approval: ["request", "policy", "answer", "draft"],
+  executing: ["request", "policy", "answer", "draft", "approval"],
+  done: ["request", "policy", "answer", "draft", "approval", "execute", "handoff", "notify"],
+};
+
+export function stepStatus(state: ScenarioState, step: StepKey, steps: StepKey[]): "done" | "active" | "bad" | "" {
+  if (state.stage === "idle") return "";
+  const done = new Set(DONE_AT[state.stage]);
+  if (state.rejected) {
+    if (step === "approval") return "bad";
+    return done.has(step) && step !== "execute" && step !== "notify" ? "done" : "";
+  }
+  if (done.has(step)) return "done";
+  const firstOpen = steps.find((s) => !done.has(s));
+  return step === firstOpen ? "active" : "";
+}
+
 function draft(prev: ScenarioState) {
-  const s: ScenarioState = { ...prev, chat: [...prev.chat], audit: [...prev.audit] };
+  const s: ScenarioState = {
+    ...prev,
+    chat: [...prev.chat],
+    audit: [...prev.audit],
+    decisions: [...prev.decisions],
+    branchesUsed: [...prev.branchesUsed],
+  };
   return {
     s,
     tick(sec: number) {
@@ -60,125 +89,171 @@ function draft(prev: ScenarioState) {
     audit(actor: string, event: string, tone?: AuditEntry["tone"]) {
       s.audit.push({ id: ++s.seq, time: formatClock(s.clock, "full"), actor, event, tone });
     },
-    say(from: ChatMessage["from"], text: string, kind: ChatMessage["kind"] = "text") {
-      s.chat.push({ id: ++s.seq, from, kind, text, time: formatClock(s.clock) });
+    say(msg: Omit<ChatMessage, "id" | "time">) {
+      s.chat.push({ ...msg, id: ++s.seq, time: formatClock(s.clock) });
     },
   };
 }
 
 export const notifiedText = (channel: ChannelId) =>
-  channel === "mobile" ? "Employee notified (push + in-app)" : `Employee notified in ${CHANNELS[channel].name}`;
-
-function finish(d: ReturnType<typeof draft>, id: ScenarioId, channel: ChannelId) {
-  const sc = SCENARIOS[id];
-  d.tick(1);
-  d.audit("Sydkyk", notifiedText(channel), "ok");
-  d.say("bot", sc.done(d.s.values!));
-  d.s.stage = "done";
-}
+  channel === "mobile" ? "Requester notified (push + in-app, simulated)" : `Requester notified in ${CHANNELS[channel].name} (simulated)`;
 
 function step(prev: ScenarioState, id: ScenarioId, channel: ChannelId, action: DemoAction): ScenarioState {
   const sc = SCENARIOS[id];
+  const requester = PERSONAS[sc.requester];
   const d = draft(prev);
   const { s } = d;
+
+  const finish = () => {
+    s.execDone = sc.exec.length;
+    if (sc.handoff) {
+      d.tick(1);
+      d.audit("Sydkyk", `Handoff created · ${sc.handoff.caseId} → ${sc.handoff.queue}`, "warn");
+    }
+    if (sc.artifact) d.say({ from: "bot", kind: "artifact", text: "" });
+    d.tick(1);
+    d.say({ from: "bot", kind: "text", text: sc.done });
+    d.audit("Sydkyk", notifiedText(channel), "ok");
+    s.stage = "done";
+  };
 
   switch (action.type) {
     case "send":
       if (s.stage !== "idle") return prev;
       d.tick(5);
-      d.say("employee", sc.prompt);
-      d.audit(sc.employee.name, "Request received via " + CHANNELS[channel].label);
+      d.say({ from: "employee", kind: "text", text: sc.prompt });
+      d.audit(requester.name, `Asked via ${CHANNELS[channel].label}`);
       s.stage = "thinking";
       return s;
 
     case "reply":
       if (s.stage !== "thinking") return prev;
       d.tick(3);
-      d.audit("Sydkyk", "Intent: " + sc.intent);
+      d.audit("Sydkyk", `Permission check passed · ${requester.scope.toLowerCase()}`);
       d.tick(1);
-      d.audit("Sydkyk", sc.readEvent);
-      d.say("bot", sc.reply);
-      d.say("bot", "", "card");
+      d.audit("Sydkyk", `Read ${sc.card.record.split(" · ")[0]} (read-only)`);
+      d.tick(1);
+      d.audit("Sydkyk", `Policy retrieved · ${sc.sources.map((x) => x.replace(/-v1\.1-s\d+$/, "")).filter((v, i, a) => a.indexOf(v) === i).join(", ")} v1.1`);
+      d.say({ from: "bot", kind: "text", text: sc.reply, sources: sc.sources });
+      d.say({ from: "bot", kind: "card", text: "" });
       s.stage = "review";
       return s;
 
-    case "submit": {
+    case "confirm": {
       if (s.stage !== "review") return prev;
-      const v = action.values;
-      s.values = v;
-      d.tick(40);
-      d.audit(sc.employee.name, "Submitted: " + sc.title(v));
-      for (const [check] of sc.checks(v)) {
+      d.tick(30);
+      d.audit(requester.name, `Confirmed: ${sc.card.title}`);
+      for (const c of sc.checks) {
         d.tick(1);
-        d.audit("Sydkyk", "Policy check passed · " + check, "ok");
+        d.audit("Sydkyk", `Policy check · ${c.label}: ${c.detail}`, c.tone === "ok" ? "ok" : c.tone === "bad" ? "bad" : "warn");
       }
-      d.tick(1);
-      d.audit("Sydkyk", "Approval requested from " + sc.approver.name);
-      if (channel === "mobile") {
+      if (sc.approvals.length) {
+        const first = PERSONAS[sc.approvals[0].by];
         d.tick(1);
-        d.audit("Sydkyk", `Push notification sent to ${sc.approver.name}’s phone`);
+        d.audit("Sydkyk", `Approval requested · ${first.name} (${sc.approvals[0].role}) · payload v1`);
+        if (sc.submitted) d.say({ from: "bot", kind: "text", text: sc.submitted });
+        s.stage = "approval";
+        s.approvalIdx = 0;
+      } else if (sc.exec.length) {
+        s.stage = "executing";
+        s.execDone = 0;
+      } else {
+        finish();
       }
-      d.say(
-        "bot",
-        `Sent to ${sc.approver.name.split(" ")[0]} for approval. Nothing changes in ${sc.systemOfRecord} until it’s approved. I’ll message you here when it’s done.`,
-      );
-      s.stage = "pending";
       return s;
     }
 
-    case "approve":
-      if (s.stage !== "pending") return prev;
-      d.tick(95);
-      d.audit(sc.approver.name, "Approved", "ok");
-      s.stage = "executing";
-      s.execDone = 0;
+    case "approve": {
+      if (s.stage !== "approval") return prev;
+      const a = sc.approvals[s.approvalIdx];
+      const who = PERSONAS[a.by];
+      d.tick(90);
+      s.decisions.push({ by: a.by, decision: "approved", time: formatClock(s.clock) });
+      d.audit(who.name, `Approved as ${a.role} · payload v1`, "ok");
+      if (s.approvalIdx < sc.approvals.length - 1) {
+        s.approvalIdx += 1;
+        const next = sc.approvals[s.approvalIdx];
+        d.tick(1);
+        d.audit("Sydkyk", `Approval requested · ${PERSONAS[next.by].name} (${next.role}) · payload v1`);
+        d.say({
+          from: "bot",
+          kind: "text",
+          text: `${who.name.split(" ")[0]} approved. Waiting for ${PERSONAS[next.by].name.split(" ")[0]} (${next.role.toLowerCase()}).`,
+        });
+      } else {
+        s.stage = "executing";
+        s.execDone = 0;
+      }
       return s;
+    }
+
+    case "reject": {
+      if (s.stage !== "approval") return prev;
+      const a = sc.approvals[s.approvalIdx];
+      const who = PERSONAS[a.by];
+      d.tick(80);
+      s.decisions.push({ by: a.by, decision: "rejected", reason: action.reason, time: formatClock(s.clock) });
+      s.rejected = true;
+      s.stage = "done";
+      d.audit(who.name, `Rejected as ${a.role} · ${action.reason}`, "bad");
+      d.tick(1);
+      d.audit("Sydkyk", `${notifiedText(channel)}. Reservation released; no system changed.`);
+      d.say({
+        from: "bot",
+        kind: "text",
+        text: `${who.name.split(" ")[0]} rejected this request: “${action.reason.replace(/[.!?]+$/, "")}.” Nothing was changed, and anything reserved has been released.`,
+      });
+      return s;
+    }
 
     case "execStep": {
-      if (s.stage !== "executing" || !s.values) return prev;
-      const steps = sc.exec(s.values);
-      if (s.execDone >= steps.length) return prev;
-      const [title, detail] = steps[s.execDone];
+      if (s.stage !== "executing" || s.execDone >= sc.exec.length) return prev;
+      const e = sc.exec[s.execDone];
       d.tick(2);
-      d.audit("Sydkyk", `${title} · ${detail}`, "ok");
+      d.audit("Sydkyk", `${e.system} (mock) · ${e.title} · ${e.detail}`, "ok");
       s.execDone += 1;
       return s;
     }
 
     case "finish":
-      if (s.stage !== "executing" || !s.values) return prev;
-      s.execDone = sc.exec(s.values).length;
-      finish(d, id, channel);
+      if (s.stage !== "executing") return prev;
+      finish();
       return s;
 
-    case "decline":
-      if (s.stage !== "pending") return prev;
-      d.tick(80);
-      s.rejected = true;
-      s.reason = action.reason;
-      s.stage = "done";
-      d.audit(sc.approver.name, "Declined · " + action.reason, "bad");
-      d.tick(1);
-      d.audit("Sydkyk", notifiedText(channel) + ". No system changes made.");
-      d.say(
-        "bot",
-        `${sc.approver.name.split(" ")[0]} declined this request: “${action.reason.replace(/[.!?]+$/, "")}.” Nothing was changed. Reply here if you want to adjust it and resend.`,
-      );
+    case "branchAsk": {
+      const b = sc.branches[action.index];
+      if (!b || s.typing || s.stage === "idle" || s.stage === "thinking") return prev;
+      if (b.afterDone && s.stage !== "done") return prev;
+      d.tick(20);
+      d.say({ from: "employee", kind: "text", text: b.prompt, as: b.as });
+      d.audit(PERSONAS[b.as ?? sc.requester].name, `Asked: “${b.prompt}”`);
+      s.typing = true;
       return s;
+    }
+
+    case "branchReply": {
+      const b = sc.branches[action.index];
+      if (!b || !s.typing) return prev;
+      d.tick(3);
+      d.say({ from: "bot", kind: "text", text: b.reply, sources: b.sources, tone: b.tone });
+      d.audit("Sydkyk", b.event, b.tone === "deny" ? "bad" : b.tone === "hold" ? "warn" : undefined);
+      s.typing = false;
+      if (!s.branchesUsed.includes(action.index)) s.branchesUsed.push(action.index);
+      return s;
+    }
 
     default:
       return prev;
   }
 }
 
-/**
- * Leaving a scenario mid-animation would strand it: a half-typed reply restarts,
- * and an in-flight execution completes instantly.
- */
+/** Leaving mid-animation: a half-typed answer restarts and an in-flight execution completes. */
 function settle(prev: ScenarioState, id: ScenarioId, channel: ChannelId): ScenarioState {
-  if (prev.stage === "thinking") return freshScenario(id);
-  if (prev.stage === "executing") return step(prev, id, channel, { type: "finish" });
-  return prev;
+  let s = prev;
+  if (s.typing) s = { ...s, typing: false, chat: s.chat.slice(0, -1) };
+  if (s.stage === "thinking") return freshScenario();
+  if (s.stage === "executing") return step(s, id, channel, { type: "finish" });
+  return s;
 }
 
 export function demoReducer(state: DemoState, action: DemoAction): DemoState {
@@ -194,7 +269,7 @@ export function demoReducer(state: DemoState, action: DemoAction): DemoState {
     case "channel":
       return { ...state, channel: action.channel };
     case "reset":
-      return { ...state, scenarios: { ...state.scenarios, [current]: freshScenario(current) } };
+      return { ...state, scenarios: { ...state.scenarios, [current]: freshScenario() } };
     default: {
       const next = step(state.scenarios[current], current, channel, action);
       if (next === state.scenarios[current]) return state;

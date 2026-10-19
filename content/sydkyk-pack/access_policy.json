@@ -1,0 +1,89 @@
+{
+  "default": "deny",
+  "tenant_must_match": true,
+  "authorization_source": "verified_server_session_and_effective_dated_grants",
+  "rules": [
+    {
+      "resource": "internal_all policy",
+      "requires": [
+        "tenant_match",
+        "employee_role"
+      ]
+    },
+    {
+      "resource": "restricted_er policy or template",
+      "requires": [
+        "tenant_match",
+        "employee_relations_role",
+        "active_assigned_case_grant"
+      ]
+    },
+    {
+      "resource": "own employee balance payroll document",
+      "requires": [
+        "tenant_match",
+        "subject_equals_session_employee"
+      ]
+    },
+    {
+      "resource": "direct report workflow task",
+      "requires": [
+        "tenant_match",
+        "manager_role",
+        "current_direct_report",
+        "field_allowlist"
+      ]
+    },
+    {
+      "resource": "finance claim",
+      "requires": [
+        "tenant_match",
+        "requester_is_self_or_active_finance_request_grant"
+      ]
+    },
+    {
+      "resource": "application approval",
+      "requires": [
+        "tenant_match",
+        "active_app_owner_grant",
+        "same_request_version"
+      ]
+    },
+    {
+      "resource": "restricted case artifact",
+      "requires": [
+        "tenant_match",
+        "employee_relations_role",
+        "exact_case_grant"
+      ]
+    }
+  ],
+  "manager_field_allowlist": [
+    "employee_id",
+    "full_name",
+    "department",
+    "job_title",
+    "office",
+    "workflow_status",
+    "required_action"
+  ],
+  "never_general_vector_index": [
+    "payslips",
+    "employee_directory",
+    "case_content",
+    "receipts",
+    "lead_details",
+    "approvals",
+    "device_custody",
+    "benefit_evidence"
+  ],
+  "cache_key_fields": [
+    "tenant_id",
+    "session_id",
+    "persona_id",
+    "roles_hash",
+    "grants_hash",
+    "document_version_set"
+  ],
+  "download_auth": "recheck_each_request_and_expire_on_reset"
+}

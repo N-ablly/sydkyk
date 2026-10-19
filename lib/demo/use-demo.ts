@@ -2,9 +2,10 @@
 
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { isChannelId } from "./channels";
+import { PERSONAS } from "./personas";
 import { demoReducer, initialDemoState } from "./reducer";
 import { SCENARIOS, isScenarioId } from "./scenarios";
-import type { ChannelId, RequestValues, ScenarioId } from "./types";
+import type { ChannelId, ScenarioId } from "./types";
 
 export type NoticeTarget = "employee" | "approver";
 export interface Notice {
@@ -13,7 +14,7 @@ export interface Notice {
   visible: boolean;
 }
 
-const STORAGE = { scenario: "sydkyk-demo-tab", channel: "sydkyk-demo-chan" };
+const STORAGE = { scenario: "sydkyk-demo-scenario", channel: "sydkyk-demo-chan" };
 
 function readStorage(key: string): string | null {
   try {
@@ -27,11 +28,11 @@ function writeStorage(key: string, value: string) {
   try {
     localStorage.setItem(key, value);
   } catch {
-    // Private mode or blocked storage: remembering the tab is a convenience only.
+    // Private mode or blocked storage: remembering the scenario is a convenience only.
   }
 }
 
-/** Demo state plus the timed side effects (typing delay, execution steps, push notifications). */
+/** Demo state plus timed side effects: typing delay, execution steps and simulated push notifications. */
 export function useDemo() {
   const [state, dispatch] = useReducer(demoReducer, undefined, initialDemoState);
   const [notices, setNotices] = useState<Partial<Record<NoticeTarget, Notice>>>({});
@@ -76,6 +77,19 @@ export function useDemo() {
   const current = state.scenarios[state.current];
   const mobile = state.channel === "mobile";
 
+  const runExecution = (onDone?: () => void) => {
+    const n = scenario.exec.length;
+    for (let i = 1; i <= n; i++) later(() => dispatch({ type: "execStep" }), 700 * i);
+    later(() => {
+      dispatch({ type: "finish" });
+      onDone?.();
+    }, 700 * n + 600);
+  };
+
+  const doneNotice = () => {
+    if (mobile) notify("employee", scenario.handoff && !scenario.exec.length ? "Request routed" : "Request complete", scenario.done.split(". ")[0] + ".");
+  };
+
   const select = (id: ScenarioId) => {
     clearTimers();
     hideNotices();
@@ -100,29 +114,41 @@ export function useDemo() {
     later(() => dispatch({ type: "reply" }), 1100);
   };
 
-  const submit = (values: RequestValues) => {
-    dispatch({ type: "submit", values });
-    if (mobile) {
-      later(() => notify("approver", "Approval needed", `${scenario.employee.name}: ${scenario.title(values)}`), 500);
+  const confirm = () => {
+    dispatch({ type: "confirm" });
+    if (scenario.approvals.length) {
+      const first = PERSONAS[scenario.approvals[0].by];
+      if (mobile) later(() => notify("approver", `Approval needed · ${first.name.split(" ")[0]}`, scenario.card.title), 500);
+    } else if (scenario.exec.length) {
+      runExecution(() => {
+        doneNotice();
+        if (mobile && scenario.handoff) notify("approver", `New case · ${scenario.handoff.caseId}`, scenario.handoff.queue);
+      });
+    } else {
+      doneNotice();
+      if (mobile && scenario.handoff) later(() => notify("approver", `New case · ${scenario.handoff!.caseId}`, scenario.handoff!.queue), 400);
     }
   };
 
   const approve = () => {
-    if (!current.values) return;
-    const values = current.values;
-    const steps = scenario.exec(values).length;
+    const last = current.approvalIdx >= scenario.approvals.length - 1;
     dispatch({ type: "approve" });
-    for (let i = 1; i <= steps; i++) later(() => dispatch({ type: "execStep" }), 700 * i);
-    later(() => {
-      dispatch({ type: "finish" });
-      if (mobile) notify("employee", "Request approved", scenario.done(values).split(". ")[0] + ".");
-    }, 700 * steps + 600);
+    if (last) runExecution(doneNotice);
+    else if (mobile) {
+      const next = PERSONAS[scenario.approvals[current.approvalIdx + 1].by];
+      later(() => notify("approver", `Approval needed · ${next.name.split(" ")[0]}`, scenario.card.title), 500);
+    }
   };
 
-  const decline = (reason: string) => {
-    dispatch({ type: "decline", reason });
-    if (mobile) notify("employee", "Request declined", `${scenario.approver.name.split(" ")[0]}: ${reason}`);
+  const reject = (reason: string) => {
+    dispatch({ type: "reject", reason });
+    if (mobile) notify("employee", "Request rejected", reason);
   };
 
-  return { state, scenario, current, notices, select, setChannel, reset, send, submit, approve, decline };
+  const branch = (index: number) => {
+    dispatch({ type: "branchAsk", index });
+    later(() => dispatch({ type: "branchReply", index }), 900);
+  };
+
+  return { state, scenario, current, notices, select, setChannel, reset, send, confirm, approve, reject, branch };
 }
