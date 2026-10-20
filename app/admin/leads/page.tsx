@@ -8,6 +8,7 @@ import type { LeadRow } from "@/lib/leads/csv";
 import { adminClient } from "@/lib/supabase/admin";
 import { currentAdmin } from "@/lib/supabase/server";
 import { signOut } from "../actions";
+import { BASE_PATH } from "@/lib/base-path";
 
 const fmt = (iso: string) =>
   new Date(iso).toLocaleString("en-PH", { timeZone: "Asia/Manila", month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
@@ -36,7 +37,7 @@ async function LeadsTable() {
           </p>
         </div>
         <div className="actions">
-          <a className="btn" href="/admin/leads/export">
+          <a className="btn" href={`${BASE_PATH}/admin/leads/export`}>
             Export CSV
           </a>
           <form action={signOut}>

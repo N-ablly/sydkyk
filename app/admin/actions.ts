@@ -7,6 +7,7 @@ import { supabaseConfigured } from "@/lib/leads/config";
 import { clientFingerprint } from "@/lib/leads/session";
 import { adminClient } from "@/lib/supabase/admin";
 import { authClient, isAllowlistedAdmin } from "@/lib/supabase/server";
+import { BASE_PATH } from "@/lib/base-path";
 
 export interface LoginState {
   status: "idle" | "sent" | "error";
@@ -40,7 +41,7 @@ export async function sendAdminLink(_prev: LoginState, form: FormData): Promise<
     const supabase = await authClient();
     const { error } = await supabase.auth.signInWithOtp({
       email: parsed.data,
-      options: { emailRedirectTo: `${await siteOrigin()}/admin/auth/callback`, shouldCreateUser: true },
+      options: { emailRedirectTo: `${await siteOrigin()}${BASE_PATH}/admin/auth/callback`, shouldCreateUser: true },
     });
     if (error) console.error("admin magic link failed", error.code ?? error.status);
   }

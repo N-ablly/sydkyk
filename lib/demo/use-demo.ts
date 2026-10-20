@@ -7,6 +7,7 @@ import { demoReducer, initialDemoState } from "./reducer";
 import { SCENARIOS, isScenarioId } from "./scenarios";
 import type { AskResult } from "@/lib/rag/types";
 import type { ChannelId, ScenarioId } from "./types";
+import { BASE_PATH } from "@/lib/base-path";
 
 export type NoticeTarget = "employee" | "approver";
 export interface Notice {
@@ -159,7 +160,7 @@ export function useDemo(initialScenario?: ScenarioId) {
     dispatch({ type: "freeAsk", scenario: id, text });
     let result: AskResult;
     try {
-      const res = await fetch("/api/ask", {
+      const res = await fetch(`${BASE_PATH}/api/ask`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: text, scenario: id }),

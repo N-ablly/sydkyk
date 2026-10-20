@@ -33,7 +33,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000.
+Open http://localhost:3000/experience (the app is served under the `/experience` base path, as on www.sydkyk.ai/experience).
 
 ```bash
 npm test          # reducer + date logic (Vitest)
