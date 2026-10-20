@@ -3,6 +3,11 @@ import { BASE_PATH } from "./lib/base-path";
 
 const nextConfig: NextConfig = {
   basePath: BASE_PATH,
+  experimental: {
+    // The demo is served through www.sydkyk.ai/experience (a rewrite from the website project), so
+    // server actions arrive with that Origin while the host is this deployment.
+    serverActions: { allowedOrigins: ["www.sydkyk.ai", "sydkyk.ai"] },
+  },
   cacheComponents: true,
   partialPrefetching: true,
   async redirects() {

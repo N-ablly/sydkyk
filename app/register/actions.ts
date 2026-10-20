@@ -103,6 +103,7 @@ export async function registerLead(_prev: RegisterState, form: FormData): Promis
       notice_version: NOTICE.version,
       marketing_opt_in: lead.marketing_opt_in,
       idempotency_key: idempotencyKey,
+      source: "experience",
     })
     .select("lead_id")
     .single();
@@ -116,6 +117,7 @@ export async function registerLead(_prev: RegisterState, form: FormData): Promis
       .from("leads")
       .update({ last_seen_at: now.toISOString(), expires_at: new Date(now.getTime() + RETENTION_MS).toISOString() })
       .eq("email_normalized", email)
+      .eq("source", "experience")
       .select("lead_id")
       .maybeSingle();
     if (touchError) console.error("lead refresh failed", touchError.code);

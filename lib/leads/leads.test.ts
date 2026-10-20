@@ -59,6 +59,9 @@ describe("CSV export", () => {
   it("writes a header and one quoted row per lead", () => {
     const row: LeadRow = {
       lead_id: "1",
+      source: "website",
+      reference: "DEMO-ABC123",
+      notified_at: null,
       created_at: "2026-10-19T00:00:00Z",
       last_seen_at: "2026-10-19T00:00:00Z",
       full_name: "Maria",
@@ -73,7 +76,8 @@ describe("CSV export", () => {
       expires_at: "2027-01-17T00:00:00Z",
     };
     const csv = leadsToCsv([row]).split("\r\n");
-    expect(csv[0].startsWith("lead_id,created_at")).toBe(true);
+    expect(csv[0].startsWith("lead_id,source,reference,created_at")).toBe(true);
+    expect(csv[1]).toContain(`"website","DEMO-ABC123"`);
     expect(csv[1]).toContain(`"HR; IT"`);
   });
 });

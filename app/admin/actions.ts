@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { supabaseConfigured } from "@/lib/leads/config";
+import { siteUrl, supabaseConfigured } from "@/lib/leads/config";
 import { clientFingerprint } from "@/lib/leads/session";
 import { adminClient } from "@/lib/supabase/admin";
 import { authClient, isAllowlistedAdmin } from "@/lib/supabase/server";
@@ -15,6 +15,8 @@ export interface LoginState {
 }
 
 async function siteOrigin() {
+  const configured = siteUrl();
+  if (configured) return configured;
   const h = await headers();
   const host = h.get("x-forwarded-host") ?? h.get("host");
   const proto = h.get("x-forwarded-proto") ?? (host?.startsWith("localhost") ? "http" : "https");

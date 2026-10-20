@@ -1,5 +1,9 @@
 export interface LeadRow {
   lead_id: string;
+  /** "experience" = demo sign-up at /experience; "website" = demo request on sydkyk.ai. */
+  source: "experience" | "website";
+  reference: string | null;
+  notified_at: string | null;
   created_at: string;
   last_seen_at: string;
   full_name: string;
@@ -11,11 +15,13 @@ export interface LeadRow {
   interest_categories: string[];
   marketing_opt_in: boolean;
   notice_version: string;
-  expires_at: string;
+  expires_at: string | null;
 }
 
 const COLUMNS: (keyof LeadRow)[] = [
   "lead_id",
+  "source",
+  "reference",
   "created_at",
   "last_seen_at",
   "full_name",
@@ -28,6 +34,7 @@ const COLUMNS: (keyof LeadRow)[] = [
   "marketing_opt_in",
   "notice_version",
   "expires_at",
+  "notified_at",
 ];
 
 /**

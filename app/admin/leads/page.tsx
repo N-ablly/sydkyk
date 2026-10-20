@@ -50,7 +50,7 @@ async function LeadsTable() {
 
       {!leadStorageEnabled() && (
         <p className="testbanner" role="note">
-          <strong>Sign-ups are in test mode.</strong> New visitors aren’t being saved until the privacy notice is approved and switched on.
+          <strong>Demo sign-ups are in test mode.</strong> People who register at /experience aren’t saved until the privacy notice is approved. Website demo requests are saved normally.
         </p>
       )}
       {error && (
@@ -70,6 +70,7 @@ async function LeadsTable() {
             <thead>
               <tr>
                 <th scope="col">Signed up</th>
+                <th scope="col">Source</th>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Company</th>
@@ -84,6 +85,12 @@ async function LeadsTable() {
               {leads.map((l) => (
                 <tr key={l.lead_id}>
                   <td>{fmt(l.created_at)}</td>
+                  <td>
+                    <span className={l.source === "website" ? "mode m-handoff" : "mode m-transaction"}>
+                      {l.source === "website" ? "Website request" : "Demo sign-up"}
+                    </span>
+                    {l.reference && <small>{l.reference}</small>}
+                  </td>
                   <td>{l.full_name}</td>
                   <td>
                     <a href={`mailto:${l.email_normalized}`}>{l.email_normalized}</a>
@@ -101,7 +108,10 @@ async function LeadsTable() {
           </table>
         </div>
       )}
-      <p className="meta">Leads are deleted automatically 90 days after their last visit.</p>
+      <p className="meta">
+        Demo sign-ups are deleted automatically 90 days after their last visit. Website demo requests follow the website privacy
+        notice and are kept until you delete them.
+      </p>
     </main>
   );
 }
