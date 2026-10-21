@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { isScenarioId } from "@/lib/demo/scenarios";
-import { leadStorageEnabled, supabaseConfigured } from "@/lib/leads/config";
+import { REGISTRATION_REQUIRED, leadStorageEnabled, supabaseConfigured } from "@/lib/leads/config";
 import { NOTICE } from "@/lib/leads/notice";
 import { FIELD_ORDER, parseLeadForm, type LeadField } from "@/lib/leads/schema";
 import { clientFingerprint, writeSession } from "@/lib/leads/session";
@@ -51,6 +51,7 @@ async function underRateLimit(): Promise<boolean> {
 }
 
 export async function registerLead(_prev: RegisterState, form: FormData): Promise<RegisterState> {
+  if (!REGISTRATION_REQUIRED) redirect("/demo");
   const values = echo(form);
   const scenario = String(form.get("scenario") ?? "");
   const next = isScenarioId(scenario) ? `/demo?scenario=${scenario}` : "/demo";

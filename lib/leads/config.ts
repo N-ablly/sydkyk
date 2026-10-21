@@ -11,6 +11,12 @@ export const supabaseSecretKey = () => process.env.SUPABASE_SECRET_KEY;
  */
 export const siteUrl = () => process.env.SITE_URL?.replace(/\/+$/, "");
 
+/**
+ * Whether /experience asks visitors to register before the demo. Off for now: the demo runs on a shared
+ * touch screen, where a sign-up step blocks the queue. Set to true to bring the registration gate back.
+ */
+export const REGISTRATION_REQUIRED = false;
+
 export const supabaseConfigured = () => Boolean(supabaseUrl() && supabasePublishableKey() && supabaseSecretKey());
 
 /** Leads are stored only with a configured database and an approved privacy notice. */

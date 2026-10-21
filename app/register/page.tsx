@@ -1,11 +1,12 @@
 import { randomUUID } from "node:crypto";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { Mascot } from "@/components/demo/chrome";
 import { RegisterForm } from "@/components/leads/register-form";
 import { SCENARIOS, isScenarioId } from "@/lib/demo/scenarios";
-import { leadStorageEnabled } from "@/lib/leads/config";
+import { REGISTRATION_REQUIRED, leadStorageEnabled } from "@/lib/leads/config";
 import { NOTICE, noticeSummary } from "@/lib/leads/notice";
 import { readSession } from "@/lib/leads/session";
 
@@ -17,6 +18,8 @@ type Search = Promise<{ scenario?: string }>;
 async function RegisterBody({ searchParams }: { searchParams: Search }) {
   const { scenario } = await searchParams;
   const target = isScenarioId(scenario) ? scenario : null;
+  // Registration is switched off for the touch-screen demo: send old /register links straight in.
+  if (!REGISTRATION_REQUIRED) redirect(target ? `/demo?scenario=${target}` : "/demo");
   const session = await readSession();
   return (
     <>

@@ -50,7 +50,7 @@ async function LeadsTable() {
 
       {!leadStorageEnabled() && (
         <p className="testbanner" role="note">
-          <strong>Demo sign-ups are in test mode.</strong> People who register at /experience aren’t saved until the privacy notice is approved. Website demo requests are saved normally.
+          <strong>Demo sign-ups are off.</strong> /experience opens without registration for the touch-screen demo, so new leads come from website demo requests.
         </p>
       )}
       {error && (
