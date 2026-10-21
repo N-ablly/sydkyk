@@ -78,11 +78,6 @@ export function Demo({ initialScenario }: { initialScenario?: ScenarioId }) {
 
   return (
     <div className="wrap">
-      <p className="banner" role="note">
-        <strong>Fictional enterprise demo.</strong> SYDKYK, its people, policies and records are invented. All transactions and
-        notifications are simulated; nothing connects to Workday, ADP, Sprout Solutions or any other system.
-      </p>
-
       <header className="top">
         <div className="brand">
           <Mascot />

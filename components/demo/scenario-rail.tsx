@@ -3,7 +3,6 @@
 import { useId, useState } from "react";
 import { PERSONAS } from "@/lib/demo/personas";
 import { DOMAINS, MODE_LABEL, SCENARIOS, SCENARIO_ORDER } from "@/lib/demo/scenarios";
-import { ROADMAP } from "@/lib/demo/sources.generated";
 import type { Domain, DemoState, ScenarioId } from "@/lib/demo/types";
 
 interface Props {
@@ -24,7 +23,6 @@ export function ScenarioRail({ state, onSelect }: Props) {
     return [s.title, s.prompt, s.domain, MODE_LABEL[s.mode], PERSONAS[s.requester].name].join(" ").toLowerCase().includes(q);
   });
 
-  const roadmapTotal = Object.values(ROADMAP).reduce((n, list) => n + list.length, 0);
 
   return (
     <nav className="rail" aria-label="Demo scenarios">
@@ -62,19 +60,6 @@ export function ScenarioRail({ state, onSelect }: Props) {
         })}
         {visible.length === 0 && <li className="meta">No scenario matches “{query}”.</li>}
       </ul>
-      <details className="roadmap">
-        <summary>
-          Roadmap · {roadmapTotal} more use cases <span className="meta">specified, not built</span>
-        </summary>
-        {DOMAINS.map((d) => (
-          <div key={d}>
-            <p className="sec-l">
-              {d} · {ROADMAP[d]?.length ?? 0}
-            </p>
-            <p className="meta">{(ROADMAP[d] ?? []).slice(0, 8).join(", ")}{(ROADMAP[d]?.length ?? 0) > 8 ? ", …" : ""}</p>
-          </div>
-        ))}
-      </details>
     </nav>
   );
 }
