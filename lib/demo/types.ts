@@ -77,11 +77,26 @@ export interface Handoff {
   nextStep: string;
 }
 
-export interface Artifact {
+/** An unsent draft for human review (e.g. the restricted NTE). */
+export interface DraftArtifact {
+  kind: "draft";
   title: string;
   banner: string;
   lines: string[];
 }
+
+/** An issued (demo) document shown after approval, e.g. the certificate of employment. */
+export interface CertificateArtifact {
+  kind: "certificate";
+  title: string;
+  heading: string;
+  reference: string;
+  issuedOn: string;
+  body: string[];
+  issuer: { name: string; role: string; approvedOn: string };
+}
+
+export type Artifact = DraftArtifact | CertificateArtifact;
 
 /** A guardrail exchange the presenter can trigger ("Try this"). It never changes the main request. */
 export interface Branch {

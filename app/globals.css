@@ -434,3 +434,32 @@ table.leads { border-collapse: collapse; width: 100%; font-size: 13.5px; min-wid
 .aimark { font-size: 10.5px; color: var(--muted); }
 .inputrow .btn { flex: none; }
 .inputrow input:not(:disabled) { color: var(--ink); background: var(--surface); }
+
+/* ---------- Issued certificate (COE) ---------- */
+.cert { --surface: #ffffff; position: relative; overflow: hidden; background: #ffffff; color: #1b2233; border: 1px solid #d9dee8; border-radius: 6px; padding: 22px 24px; font: 13.5px/1.6 Georgia, "Times New Roman", serif; display: grid; gap: 10px; color-scheme: light; }
+.cert p { margin: 0; }
+.cert-wm { position: absolute; inset: 0; display: grid; place-items: center; transform: rotate(-24deg); font: 800 34px var(--f-body); letter-spacing: .12em; color: rgba(180, 35, 24, .12); pointer-events: none; white-space: nowrap; }
+.cert-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; padding-bottom: 10px; border-bottom: 2px solid #0068f8; }
+.cert-head .mascot { --brand: #0068f8; }
+.cert-head strong { display: block; font: 800 15px var(--f-display); letter-spacing: .12em; color: #0f1828; }
+.cert-head span { font: 11.5px var(--f-body); color: #5b6478; }
+.cert-head dl { margin: 0; display: grid; grid-template-columns: auto auto; gap: 0 8px; font: 11.5px var(--f-body); color: #5b6478; }
+.cert-head dd { margin: 0; color: #1b2233; font-variant-numeric: tabular-nums; }
+.cert-title { margin: 6px 0 2px; text-align: center; font: 700 15px var(--f-body); letter-spacing: .16em; color: #0f1828; }
+.cert-to { font-style: italic; }
+.cert-sign { margin-top: 8px; display: grid; gap: 2px; }
+.cert-sign strong { display: block; font: 700 13.5px var(--f-body); }
+.cert-sign span { font: 12px var(--f-body); color: #5b6478; }
+.cert-approved { font: 11.5px var(--f-body); color: #12805c; }
+.cert-note { margin-top: 6px; padding-top: 8px; border-top: 1px dashed #d9dee8; font: 10.5px var(--f-body); color: #b42318; }
+
+.cert-card { width: min(460px, 100%); text-align: left; padding: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); overflow: hidden; display: grid; cursor: pointer; }
+.cert-card:hover { border-color: var(--accent); }
+.cert-card-h, .cert-card-f { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 9px 12px; }
+.cert-card-h { border-bottom: 1px solid var(--line); }
+.cert-card-f { border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.cert-open { color: var(--accent); font-weight: 700; white-space: nowrap; }
+.cert-preview { display: block; height: 168px; overflow: hidden; background: var(--sunken); padding: 10px 12px 0; }
+.cert-preview .cert { transform: scale(.82); transform-origin: top left; width: calc(100% / .82); }
+dialog.cert-dialog { width: min(680px, calc(100vw - 32px)); }
+dialog.cert-dialog .cert { font-size: 15px; padding: 28px 32px; }

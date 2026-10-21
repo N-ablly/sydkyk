@@ -113,9 +113,10 @@ function step(prev: ScenarioState, id: ScenarioId, channel: ChannelId, action: D
       d.tick(1);
       d.audit("Sydkyk", `Handoff created · ${sc.handoff.caseId} → ${sc.handoff.queue}`, "warn");
     }
-    if (sc.artifact) d.say({ from: "bot", kind: "artifact", text: "" });
     d.tick(1);
+    // The message first ("Here’s your certificate…"), then the document itself.
     d.say({ from: "bot", kind: "text", text: sc.done });
+    if (sc.artifact) d.say({ from: "bot", kind: "artifact", text: "" });
     d.audit("Sydkyk", notifiedText(channel), "ok");
     s.stage = "done";
   };

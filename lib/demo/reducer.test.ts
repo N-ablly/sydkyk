@@ -72,6 +72,23 @@ describe("approval flows", () => {
   });
 });
 
+describe("certificate of employment (S03)", () => {
+  it("after People Operations approves, says here is your COE and then shows the issued certificate", () => {
+    const pending = run([...open("S03"), { type: "confirm" }]).scenarios.S03;
+    expect(pending.chat.some((m) => m.kind === "artifact")).toBe(false);
+    const s = run([...open("S03"), { type: "confirm" }, { type: "approve" }, ...execAll("S03")]).scenarios.S03;
+    expect(s.decisions.map((d) => d.by)).toEqual(["E0007"]);
+    expect(s.chat.at(-2)?.text).toContain("Here’s your Certificate of Employment, Ana");
+    expect(s.chat.at(-1)?.kind).toBe("artifact");
+    expect(SCENARIOS.S03.artifact?.kind).toBe("certificate");
+  });
+
+  it("a rejected COE request never shows a certificate", () => {
+    const s = run([...open("S03"), { type: "confirm" }, { type: "reject", reason: "Start date needs correcting" }]).scenarios.S03;
+    expect(s.chat.some((m) => m.kind === "artifact")).toBe(false);
+  });
+});
+
 describe("handoffs never fake execution", () => {
   it.each(["S02", "S05", "S08", "S12"] as const)("%s ends in a human handoff with no mock execution", (id) => {
     const s = run([...open(id), { type: "confirm" }]).scenarios[id];

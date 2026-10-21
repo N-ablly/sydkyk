@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import { SOURCES, type SourceId } from "@/lib/demo/sources.generated";
 import type { SourceRef } from "@/lib/rag/types";
 import type { Artifact, RequestCard as Card, ScenarioState } from "@/lib/demo/types";
+import { CertificateCard } from "./certificate";
 
 /** Scripted citations are stored as IDs; free-text answers carry full source objects. */
 export const refsFor = (ids?: SourceId[]): SourceRef[] => (ids ?? []).map((id) => ({ id, ...SOURCES[id] }));
@@ -94,6 +95,7 @@ export function RequestCard({
 }
 
 export function ArtifactCard({ artifact }: { artifact: Artifact }) {
+  if (artifact.kind === "certificate") return <CertificateCard cert={artifact} />;
   return (
     <div className="card artifact">
       <div className="card-h">

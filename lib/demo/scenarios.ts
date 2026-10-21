@@ -176,19 +176,21 @@ const S03: Scenario = {
   approvals: [{ by: "E0007", role: "People Operations reviewer" }],
   exec: [
     { system: "Workday", title: "Verify employment record", detail: "E0001 · details match the draft" },
-    { system: "Document service", title: "Generate certificate", detail: "COE-DEMO-001 · unsigned, watermarked" },
+    { system: "Document service", title: "Issue certificate", detail: "COE-DEMO-001 · sample watermark, no signature or seal" },
   ],
   artifact: {
-    title: "Certificate of employment draft",
-    banner: "DRAFT FOR PEOPLE OPERATIONS REVIEW",
-    lines: [
-      "Prepared October 15, 2026. Purpose: Visa application. Compensation is excluded.",
-      "This is to certify that Ana Reyes, employee E0001, is employed by SYDKYK as Customer Success Specialist from March 15, 2022 and is recorded as active as of October 15, 2026.",
-      "Prepared by People Operations using the employment record in Workday. This draft is not an issued certificate.",
-      "Authorized signatory and issuance reference: To be completed after review.",
+    kind: "certificate",
+    title: "Certificate of Employment",
+    heading: "CERTIFICATE OF EMPLOYMENT",
+    reference: "COE-DEMO-001",
+    issuedOn: "October 15, 2026",
+    body: [
+      "This is to certify that Ana Reyes, employee ID E0001, is employed by SYDKYK as Customer Success Specialist from March 15, 2022 to present, and is recorded as an active regular employee as of October 15, 2026.",
+      "This certificate is issued at the employee’s request for a visa application. Compensation details are not included.",
     ],
+    issuer: { name: "Nico Mendoza", role: "People Operations, SYDKYK", approvedOn: "Oct 15, 2026" },
   },
-  done: "Nico verified your details. Your certificate is ready to review below.",
+  done: "Here’s your Certificate of Employment, Ana! Nico from People Operations verified your details and approved it. Tap the certificate to view it full size.",
   evidence: ["Issued only inside the demo after People Operations approval.", "The file is fictional, unsigned and not valid for any external submission."],
   branches: [
     {
@@ -648,6 +650,7 @@ const S11: Scenario = {
     nextStep: "ER and Legal approve the wording, response period and meeting arrangements before an authorized person issues anything.",
   },
   artifact: {
+    kind: "draft",
     title: "Notice to explain · draft",
     banner: "DRAFT NOT FOR SERVICE · FOR EMPLOYEE RELATIONS AND LEGAL REVIEW",
     lines: [
