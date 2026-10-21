@@ -68,8 +68,10 @@ export function Demo({ initialScenario }: { initialScenario?: ScenarioId }) {
   const [seenKey, setSeenKey] = useState(stageKey);
   if (seenKey !== stageKey) {
     setSeenKey(stageKey);
+    // Approval happens on the approver's phone; everything else, including the finished result
+    // (e.g. the issued certificate), is shown to the requester.
     if (current.stage === "approval") setTab("approver");
-    else if (current.stage !== "executing" && current.stage !== "done") setTab("employee");
+    else if (current.stage !== "executing") setTab("employee");
   }
 
   const select = demo.select;
