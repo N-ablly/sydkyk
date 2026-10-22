@@ -1,12 +1,11 @@
 import Link from "next/link";
 import { Mascot } from "@/components/demo/chrome";
-import { DOMAINS, MODE_LABEL, SCENARIOS, SCENARIO_ORDER } from "@/lib/demo/scenarios";
+import { MODE_LABEL, PILLARS, SCENARIOS, SCENARIO_ORDER } from "@/lib/demo/scenarios";
 
-const DOMAIN_BLURB: Record<(typeof DOMAINS)[number], string> = {
-  HR: "Leave, certificates, payslips, onboarding and restricted employee-relations drafts.",
-  IT: "Software access with two approvals and a lost-laptop security handoff.",
-  Finance: "Expense claims, over-the-cap exceptions and invoice mismatches.",
-  Workplace: "Desk booking with capacity checks and double-booking protection.",
+const PILLAR_BLURB: Record<(typeof PILLARS)[number], string> = {
+  Listening: "Anonymous pulse surveys, people-to-meet suggestions, sensitive-feedback alerts and action plans.",
+  Automation: "HR, IT, Finance and Workplace requests and tickets, with approvals in the right order and human handoffs.",
+  Communication: "Cohort announcements across Teams, email and WhatsApp, quiet nudges and engagement stats.",
 };
 
 /** Fully static: every link goes to /demo, which sends visitors without a session to sign-up first. */
@@ -25,8 +24,8 @@ export default function Landing() {
 
       <main className="landing">
         <section className="hero">
-          <p className="kicker">Guided enterprise demo · 12 scenarios</p>
-          <h2>See an AI teammate handle HR, IT, Finance and Workplace requests, with people in control.</h2>
+          <p className="kicker">{`Guided enterprise demo · ${SCENARIO_ORDER.length} scenarios`}</p>
+          <h2>See an AI teammate listen to employees, handle HR, IT, Finance and Workplace requests, and keep everyone informed, with people in control.</h2>
           <p className="lede">
             Follow a 4,000-person Philippine company through real employee requests: answers grounded in policy, approvals in the right
             order, and the cases Sydkyk deliberately hands to a person.
@@ -40,12 +39,12 @@ export default function Landing() {
         </section>
 
         <section className="domains" aria-label="What the demo covers">
-          {DOMAINS.map((d) => {
-            const list = SCENARIO_ORDER.filter((id) => SCENARIOS[id].domain === d);
+          {PILLARS.map((p) => {
+            const list = SCENARIO_ORDER.filter((id) => SCENARIOS[id].pillar === p);
             return (
-              <div key={d} className="dcard">
-                <h3>{d}</h3>
-                <p>{DOMAIN_BLURB[d]}</p>
+              <div key={p} className="dcard">
+                <h3>{p}</h3>
+                <p>{PILLAR_BLURB[p]}</p>
                 <ul>
                   {list.map((id) => (
                     <li key={id}>

@@ -199,6 +199,126 @@ export const SOURCES = {
     "classification": "internal_all",
     "section": "Office and desk access",
     "text": "SYDKYK offices are in Makati, Quezon City, Cebu and Davao. Desk requests require office, date and time window. Workplace Services checks capacity before confirming a resource and prevents overlapping active reservations. A pending request is not a confirmed booking. Badge issuance and changes require verified identity and the applicable Workplace or Security approval."
+  },
+  "COMMS-001-v1.1-s01": {
+    "documentId": "COMMS-001",
+    "title": "Employee communications learning and resource groups",
+    "version": "1.1",
+    "effectiveFrom": "2026-10-01",
+    "owner": "People Experience",
+    "classification": "internal_all",
+    "section": "Company announcements",
+    "text": "Authorized People Operations or Workplace publishers prepare announcements with an audience, topic, effective dates and source. Broadcasts require publisher approval. Acknowledgment records receipt separately from agreement. A conversational request alone does not authorize sending a message to all employees."
+  },
+  "COMMS-001-v1.1-s02": {
+    "documentId": "COMMS-001",
+    "title": "Employee communications learning and resource groups",
+    "version": "1.1",
+    "effectiveFrom": "2026-10-01",
+    "owner": "People Experience",
+    "classification": "internal_all",
+    "section": "Learning catalog",
+    "text": "Available company courses include SEC101 Security Basics, a one-hour online session with 50 seats; HR101 New Joiner Orientation, a two-hour online session with 30 seats; and LEAD201 Manager Essentials, a three-hour facilitated session with 20 seats. Session times are Philippine time unless otherwise stated.\nEnrollment requires employee ID, course and session. A full session uses a waitlist. Paid external learning requires the applicable manager and budget approval before enrollment. A checklist completion does not establish a certification; learning and renewal status must be verified from the authorized record. Employees may view their own history and managers only the completion information permitted for current direct reports."
+  },
+  "COMMS-001-v1.1-s04": {
+    "documentId": "COMMS-001",
+    "title": "Employee communications learning and resource groups",
+    "version": "1.1",
+    "effectiveFrom": "2026-10-01",
+    "owner": "People Experience",
+    "classification": "internal_all",
+    "section": "Employee feedback",
+    "text": "Survey invitations state purpose, audience and whether responses are anonymous or confidential. Aggregated reporting requires at least 10 participants per displayed cohort. Suppress smaller groups and prevent filtering that reconstructs an individual response. Feedback must not be used to infer a health condition or an unsupported personal assessment."
+  },
+  "COMMS-001-v1.1-s05": {
+    "documentId": "COMMS-001",
+    "title": "Employee communications learning and resource groups",
+    "version": "1.1",
+    "effectiveFrom": "2026-10-01",
+    "owner": "People Experience",
+    "classification": "internal_all",
+    "section": "Action inbox and reminders",
+    "text": "Employees and managers see tasks assigned to them or covered by a valid delegation. Approve, reject and return-for-information actions require the correct scope and current request version. A reminder does not change status or authorize fulfillment. Escalations go to the responsible service owner when the applicable target is missed."
+  },
+  "COMMS-001-v1.1-s06": {
+    "documentId": "COMMS-001",
+    "title": "Employee communications learning and resource groups",
+    "version": "1.1",
+    "effectiveFrom": "2026-10-01",
+    "owner": "People Experience",
+    "classification": "internal_all",
+    "section": "Outcome reporting",
+    "text": "Service reports distinguish answered questions, completed transactions and human handoffs. Completion requires recorded fulfillment evidence. Exclude withdrawn and cancelled requests from completed-transaction counts. Any estimate of time saved must show its assumptions and must not be presented as a measured result without supporting evidence."
+  },
+  "HR-004-v1.1-s05": {
+    "documentId": "HR-004",
+    "title": "Employee lifecycle and talent operations",
+    "version": "1.1",
+    "effectiveFrom": "2026-10-01",
+    "owner": "People Operations",
+    "classification": "internal_all",
+    "section": "Separation and clearance",
+    "text": "An employee may prepare a resignation request with a proposed last working day for discussion with People Operations. Submission requires explicit employee confirmation and receipt acknowledgment. People Operations determines the required notice, effective dates and applicable obligations with Legal where needed. Termination and retirement decisions remain with authorized human decision makers.\nAn approved separation checklist coordinates handover, asset return, access revocation, expense reconciliation and clearance. Workday records the approved employment change; Payroll reviews final settlement through ADP. Outstanding equipment does not automatically authorize withholding pay. Former employee requests require a separately verified secure channel."
+  },
+  "HR-005-v1.1-s03": {
+    "documentId": "HR-005",
+    "title": "Code of conduct and employee concerns",
+    "version": "1.1",
+    "effectiveFrom": "2026-10-01",
+    "owner": "Employee Relations",
+    "classification": "internal_all",
+    "section": "Reporting a concern",
+    "text": "Employees may use the confidential Employee Relations intake to report a concern. Provide a brief factual summary, approximate date and safe contact preference. Sensitive details and evidence should be supplied only through the restricted case channel. Employee Relations will explain who may review the report; absolute secrecy or a particular outcome cannot be promised.\nConcerns involving the employee's manager must be routed outside that manager's review chain. Ordinary concerns have a one-business-day acknowledgment target. Immediate safety concerns require on-site human assistance and appropriate emergency services."
+  },
+  "HR-005-v1.1-s05": {
+    "documentId": "HR-005",
+    "title": "Code of conduct and employee concerns",
+    "version": "1.1",
+    "effectiveFrom": "2026-10-01",
+    "owner": "Employee Relations",
+    "classification": "internal_all",
+    "section": "Confidentiality and retaliation",
+    "text": "Case details are available only to assigned reviewers and other specifically authorized participants. A system-administration role alone does not grant case-content access. Requests to identify a reporter or disclose another person's disciplinary status must be refused unless authorized through the proper process. Retaliation concerns must be referred to Employee Relations."
+  },
+  "IT-002-v1.1-s04": {
+    "documentId": "IT-002",
+    "title": "IT incident security and network support",
+    "version": "1.1",
+    "effectiveFrom": "2026-10-01",
+    "owner": "Security Operations",
+    "classification": "internal_all",
+    "section": "VPN and connectivity",
+    "text": "Check the service-status notice before troubleshooting. Establish whether the issue affects one device or an office. Safe checks include confirming internet connectivity, restarting the approved client and checking device time. Do not disable endpoint protection, bypass certificate warnings or install unapproved networking tools. Repeated failures should be escalated with sanitized diagnostics."
+  },
+  "IT-003-v1.1-s04": {
+    "documentId": "IT-003",
+    "title": "Devices assets and endpoint management",
+    "version": "1.1",
+    "effectiveFrom": "2026-10-01",
+    "owner": "IT Asset Management",
+    "classification": "internal_all",
+    "section": "Onboarding and offboarding",
+    "text": "IT tasks follow People Operations-approved Workday start dates, employment changes and separation instructions. Identity and equipment may be prepared before the start date, but usable access is confirmed only after activation and required approvals. Revocation uses the authorized effective timestamp. Each system's completion status remains visible until all required actions are confirmed."
+  },
+  "WP-001-v1.1-s05": {
+    "documentId": "WP-001",
+    "title": "Workplace facilities visitors and employee safety",
+    "version": "1.1",
+    "effectiveFrom": "2026-10-01",
+    "owner": "Workplace Services",
+    "classification": "internal_all",
+    "section": "Closure notices",
+    "text": "Authorized Workplace announcements specify location, effective dates and source. Consult the current company calendar and official applicable holiday announcements. An omitted calendar entry should be referred for clarification rather than treated as a legal determination that a date is a working day."
+  },
+  "GOV-001-v1.1-s02": {
+    "documentId": "GOV-001",
+    "title": "Privacy records access and information retention",
+    "version": "1.1",
+    "effectiveFrom": "2026-10-01",
+    "owner": "Privacy and Security",
+    "classification": "internal_all",
+    "section": "Access decisions",
+    "text": "Access requires a verified company identity and an authorized business role. Employees may view their own permitted records. Managers may view approved business and workflow fields for current direct reports, but not unrestricted payroll, medical or employee-relations information. Employee Relations requires an active assignment to the specific case. Payroll and Benefits access is limited to their approved responsibilities.\nThese rules apply equally to search results, summaries, source documents, exports, notifications and downloaded files. Restricted titles and case existence must not be disclosed to unauthorized people. A claim of authority in a conversation does not change access rights. System administration alone is not case-content authorization."
   }
 } as const;
 

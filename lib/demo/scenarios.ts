@@ -1,10 +1,10 @@
 /*
- * The 12 scripted journeys (S01–S12) from the SYDKYK enterprise pack's presenter runbook.
+ * Scripted journeys. S01–S12 come from the SYDKYK enterprise pack's presenter runbook; S13–S20 are below.
  * Amounts, IDs and wording follow 03_seed_data fixtures and the v1.1 policies in content/sydkyk-pack.
  * All systems are mock: nothing here talks to Workday, ADP, Sprout Solutions or any other service.
  */
 import { PERSONAS, QUEUES } from "./personas";
-import type { Domain, Mode, Scenario, ScenarioId } from "./types";
+import type { Domain, Mode, Pillar, Scenario, ScenarioId } from "./types";
 
 const ASOF = "as of Oct 15, 2026 · 09:00 PHT";
 
@@ -12,6 +12,7 @@ const S01: Scenario = {
   id: "S01",
   title: "Leave request",
   domain: "HR",
+  pillar: "Automation",
   mode: "transaction",
   useCase: "HR-UC02",
   requester: "E0001",
@@ -81,6 +82,7 @@ const S02: Scenario = {
   id: "S02",
   title: "Not enough leave",
   domain: "HR",
+  pillar: "Automation",
   mode: "handoff",
   useCase: "HR-UC02",
   requester: "E0003",
@@ -144,6 +146,7 @@ const S03: Scenario = {
   id: "S03",
   title: "Certificate of employment",
   domain: "HR",
+  pillar: "Automation",
   mode: "draft",
   useCase: "HR-UC10",
   requester: "E0001",
@@ -217,6 +220,7 @@ const S04: Scenario = {
   id: "S04",
   title: "Expense reimbursement",
   domain: "Finance",
+  pillar: "Automation",
   mode: "transaction",
   useCase: "FIN-UC01",
   requester: "E0001",
@@ -284,6 +288,7 @@ const S05: Scenario = {
   id: "S05",
   title: "Expense over the cap",
   domain: "Finance",
+  pillar: "Automation",
   mode: "handoff",
   useCase: "FIN-UC04",
   requester: "E0001",
@@ -343,6 +348,7 @@ const S06: Scenario = {
   id: "S06",
   title: "Software access",
   domain: "IT",
+  pillar: "Automation",
   mode: "transaction",
   useCase: "IT-UC01",
   requester: "E0001",
@@ -408,6 +414,7 @@ const S07: Scenario = {
   id: "S07",
   title: "Payslip explained",
   domain: "HR",
+  pillar: "Automation",
   mode: "answer",
   useCase: "HR-UC13",
   requester: "E0001",
@@ -467,6 +474,7 @@ const S08: Scenario = {
   id: "S08",
   title: "Lost laptop",
   domain: "IT",
+  pillar: "Automation",
   mode: "handoff",
   useCase: "IT-UC12",
   requester: "E0001",
@@ -524,6 +532,7 @@ const S09: Scenario = {
   id: "S09",
   title: "Desk booking",
   domain: "Workplace",
+  pillar: "Automation",
   mode: "transaction",
   useCase: "WP-UC01",
   requester: "E0001",
@@ -566,6 +575,7 @@ const S10: Scenario = {
   id: "S10",
   title: "New joiner readiness",
   domain: "HR",
+  pillar: "Automation",
   mode: "transaction",
   useCase: "HR-UC21",
   requester: "E0007",
@@ -615,6 +625,7 @@ const S11: Scenario = {
   id: "S11",
   title: "Restricted NTE draft",
   domain: "HR",
+  pillar: "Automation",
   mode: "draft",
   useCase: "HR-UC37",
   requester: "E0004",
@@ -687,6 +698,7 @@ const S12: Scenario = {
   id: "S12",
   title: "Invoice mismatch",
   domain: "Finance",
+  pillar: "Automation",
   mode: "handoff",
   useCase: "FIN-UC10",
   requester: "E0006",
@@ -737,8 +749,551 @@ const S12: Scenario = {
   ],
 };
 
-export const SCENARIOS: Record<ScenarioId, Scenario> = { S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11, S12 };
-export const SCENARIO_ORDER: ScenarioId[] = ["S01", "S02", "S03", "S04", "S05", "S06", "S07", "S08", "S09", "S10", "S11", "S12"];
+/*
+ * S13–S20 extend the runbook with listening, automation and communication journeys.
+ * They follow the same v1.1 policies (COMMS-001, HR-004, HR-005, IT-002, IT-003, WP-001); the
+ * cohorts, counts and IDs are fictional demo fixtures.
+ */
+
+const S13: Scenario = {
+  id: "S13",
+  title: "Pulse survey",
+  domain: "HR",
+  pillar: "Listening",
+  mode: "transaction",
+  useCase: "HR-UC43",
+  requester: "E0002",
+  minutes: "3 min",
+  steps: ["request", "policy", "approval", "execute", "notify"],
+  prompt: "Send my team a 3-question pulse on workload, anonymous.",
+  reply:
+    "Your Customer Success team has 14 people, above the 10-person minimum for anonymous results. I drafted three questions in English and Filipino. Nico in People Operations approves surveys before they go out.",
+  sources: ["COMMS-001-v1.1-s04", "COMMS-001-v1.1-s01"],
+  card: {
+    title: "Pulse survey · Workload check-in",
+    record: `Workday · Customer Success cohort ${ASOF}`,
+    tiles: [
+      { value: "14", label: "Invited" },
+      { value: "3", label: "Questions" },
+      { value: "10+", label: "To show results" },
+    ],
+    rows: [
+      ["Audience", "Customer Success · Makati (14)"],
+      ["Anonymity", "Anonymous · team totals only, 10+ responses"],
+      ["Questions", "Workload this month (1–5) · What slows you down? · One thing to change"],
+      ["Languages", "English, Filipino"],
+      ["Channels", "Teams, with email fallback"],
+      ["Closes", "Thu Oct 22, 18:00 PHT"],
+      ["Approver", "Nico Mendoza (People Operations)"],
+    ],
+    chips: [{ text: "Invite states purpose and anonymity", tone: "info" }],
+    confirm: "Send for approval",
+  },
+  checks: [
+    { label: "Cohort size", detail: "14 people, minimum 10 for anonymous reporting", tone: "ok" },
+    { label: "Invite wording", detail: "Purpose, audience and anonymity stated", tone: "ok" },
+    { label: "Sensitive inference", detail: "No health or personal-assessment questions", tone: "ok" },
+  ],
+  submitted: "Sent to Nico for approval. Nothing reaches your team until it’s approved.",
+  approvals: [{ by: "E0007", role: "Survey owner" }],
+  exec: [
+    { system: "Survey service", title: "Schedule pulse", detail: "PULSE-DEMO-001 · 14 invites, closes Oct 22" },
+    { system: "Teams", title: "Deliver invites", detail: "14 delivered · email fallback for anyone offline" },
+    { system: "Listening dashboard", title: "Open live results", detail: "Team totals only · hidden until 10 responses" },
+  ],
+  done: "Nico approved. PULSE-DEMO-001 went to 14 people in Teams. Results unlock on the listening dashboard once 10 have answered, and only as team totals.",
+  evidence: ["One pulse scheduled to a 14-person cohort; results stay hidden below 10 responses.", "No real survey or message was sent."],
+  branches: [
+    {
+      label: "Ask who gave a low score",
+      prompt: "Tell me who rated workload 1.",
+      reply: "I can’t. The survey is anonymous, so you’ll see team totals only, once 10 or more people have answered.",
+      event: "Request to identify an anonymous respondent refused",
+      tone: "deny",
+      sources: ["COMMS-001-v1.1-s04"],
+    },
+    {
+      label: "Filter to a 3-person pod",
+      prompt: "Show results just for the 3 people on the enterprise pod.",
+      reply: "That group is under 10 people, so its results are hidden. A filter that narrow could reveal individual answers.",
+      event: "Small-cohort filter suppressed (under 10)",
+      tone: "deny",
+      sources: ["COMMS-001-v1.1-s04"],
+    },
+  ],
+};
+
+const S14: Scenario = {
+  id: "S14",
+  title: "People to meet",
+  domain: "HR",
+  pillar: "Listening",
+  mode: "answer",
+  useCase: "HR-UC40",
+  requester: "E0002",
+  minutes: "2 min",
+  steps: ["request", "policy", "answer", "execute", "notify"],
+  prompt: "Who should I meet one-on-one this week?",
+  reply:
+    "Three people on your team are worth a conversation. This comes from check-ins they chose to share with you and from tenure milestones, never from anonymous survey answers. Treat it as a prompt to talk, not a prediction.",
+  sources: ["COMMS-001-v1.1-s04", "GOV-001-v1.1-s02"],
+  card: {
+    title: "People to meet · week of Oct 19",
+    record: `Check-ins shared with you · Workday tenure ${ASOF}`,
+    tiles: [
+      { value: "3", label: "Suggested 1:1s" },
+      { value: "14", label: "Team" },
+      { value: "0", label: "From anonymous data", tone: "ok" },
+    ],
+    rows: [
+      ["1 · Ana Reyes", "Shared check-in: workload high for 3 weeks"],
+      ["2 · Joy Tan", "6-month milestone; check-in not done"],
+      ["3 · Raf Ocampo", "Shared check-in: unsure about growth path"],
+      ["Themes", "Workload and career growth"],
+      ["Suggested opener", "“How has the last month felt for you?”"],
+    ],
+    chips: [{ text: "Conversation prompts, not risk scores", tone: "info" }],
+    confirm: "Hold 1:1s on my calendar",
+  },
+  checks: [
+    { label: "Source", detail: "Shared check-ins and tenure only; anonymous answers excluded", tone: "ok" },
+    { label: "Scope", detail: "Current direct reports only", tone: "ok" },
+    { label: "Labels", detail: "No attrition prediction shown to the manager", tone: "ok" },
+  ],
+  approvals: [],
+  exec: [
+    { system: "Calendar", title: "Hold 1:1 slots", detail: "3 × 30 min, Oct 19–21 · titled “Catch-up”, no reason in the invite" },
+    { system: "Action tracker", title: "Log follow-ups", detail: "PTM-DEMO-001 · note due after each 1:1" },
+  ],
+  observer: { name: PERSONAS.E0007.name, initials: PERSONAS.E0007.initials, role: "People Operations · HR partner for Customer Success" },
+  done: "Three 1:1s are on your calendar for Oct 19–21, titled “Catch-up” with no reason attached. I’ll remind you to log a short note after each one.",
+  evidence: ["Suggestions used only shared check-ins and tenure; no anonymous response was read.", "No real calendar invite was sent."],
+  branches: [
+    {
+      label: "Ask if Ana will resign",
+      prompt: "Is Ana going to resign?",
+      reply:
+        "I can’t predict that, and I don’t label people as flight risks. Ana shared that her workload has been high; the 1:1 is the place to ask her how she’s doing.",
+      event: "Attrition prediction about a named employee refused",
+      tone: "deny",
+      sources: ["COMMS-001-v1.1-s04"],
+    },
+    {
+      label: "Ask for Ana’s survey answers",
+      prompt: "Show me what Ana wrote in the anonymous pulse.",
+      reply: "Anonymous answers aren’t linked to anyone, including for managers. You’ll see team totals once 10 or more people have answered.",
+      event: "Request to de-anonymize a survey response refused",
+      tone: "deny",
+      sources: ["COMMS-001-v1.1-s04", "GOV-001-v1.1-s02"],
+    },
+  ],
+};
+
+const S15: Scenario = {
+  id: "S15",
+  title: "Sensitive feedback alert",
+  domain: "HR",
+  pillar: "Listening",
+  mode: "handoff",
+  useCase: "HR-UC36",
+  requester: "E0003",
+  minutes: "2 min",
+  steps: ["request", "policy", "handoff"],
+  prompt: "Anonymous feedback: my team lead keeps making comments about my age in meetings.",
+  reply:
+    "Thank you for telling me. This reads like a possible harassment or discrimination concern, so I won’t file it as general team feedback. I can send it to Employee Relations through the confidential intake, outside your team lead’s chain. You choose how they contact you.",
+  sources: ["HR-005-v1.1-s03", "HR-005-v1.1-s05"],
+  card: {
+    title: "Confidential concern · Employee Relations",
+    record: "Keyword alert · held out of team feedback reports",
+    rows: [
+      ["Summary", "Repeated comments about age in team meetings"],
+      ["When", "Ongoing; most recently Oct 13"],
+      ["Route", "Employee Relations, outside your team lead’s chain"],
+      ["Contact", "Teams chat only (your choice)"],
+      ["Visible to", "The assigned ER reviewer"],
+    ],
+    chips: [
+      { text: "Sensitive keyword alert", tone: "warn" },
+      { text: "Not added to team dashboards", tone: "info" },
+    ],
+    confirm: "Send to Employee Relations",
+  },
+  checks: [
+    { label: "Keyword alert", detail: "Possible harassment; held out of feedback reporting", tone: "warn" },
+    { label: "Routing", detail: "Concern involves the team lead → outside that review chain", tone: "ok" },
+    { label: "Evidence", detail: "Details go to the restricted case channel, not chat", tone: "ok" },
+  ],
+  approvals: [],
+  exec: [],
+  handoff: {
+    queue: "Employee Relations · confidential intake",
+    owner: { name: PERSONAS.E0004.name, initials: PERSONAS.E0004.initials, role: PERSONAS.E0004.role },
+    caseId: "ER-DEMO-002",
+    nextStep: "Liza acknowledges within one business day and explains who may review the report. No particular outcome is promised.",
+  },
+  done: "Sent to Employee Relations as ER-DEMO-002. Liza will reach out in Teams within one business day. Your team lead isn’t notified, and this doesn’t appear in any team feedback report.",
+  evidence: ["Concern routed outside the reporter’s management chain and kept out of feedback dashboards.", "No real case or message was created."],
+  branches: [
+    {
+      label: "Ask for total secrecy",
+      prompt: "Promise nobody will ever know it was me.",
+      reply:
+        "I can’t promise absolute secrecy. Employee Relations will tell you exactly who can see the report, and retaliation for raising a concern is itself something you can report.",
+      event: "Absolute-secrecy promise declined; reporter told who may review",
+      tone: "info",
+      sources: ["HR-005-v1.1-s03", "HR-005-v1.1-s05"],
+    },
+    {
+      label: "Mark asks who reported",
+      as: "E0002",
+      prompt: "Who filed a complaint about comments in meetings?",
+      reply: "I don’t have anything I can share for that.",
+      event: "Request to identify a reporter refused (no case existence disclosed)",
+      tone: "deny",
+      sources: ["HR-005-v1.1-s05"],
+    },
+  ],
+};
+
+const S16: Scenario = {
+  id: "S16",
+  title: "Action plan from feedback",
+  domain: "HR",
+  pillar: "Listening",
+  mode: "transaction",
+  useCase: "HR-UC43",
+  requester: "E0002",
+  minutes: "3 min",
+  steps: ["request", "policy", "execute", "notify"],
+  prompt: "Turn last month’s pulse results into an action plan.",
+  reply:
+    "11 of 14 answered, so team results are unlocked. The top theme is slow approvals on customer credits. I drafted two actions with owners and dates, a short reply that tells the team what’s changing, and a follow-up pulse.",
+  sources: ["COMMS-001-v1.1-s04", "COMMS-001-v1.1-s05"],
+  card: {
+    title: "Action plan · September workload pulse",
+    record: "PULSE-SEP-001 · 11 of 14 responses · team totals only",
+    tiles: [
+      { value: "11/14", label: "Answered" },
+      { value: "2.8", label: "Workload (of 5)", tone: "warn" },
+      { value: "6", label: "Mention approvals" },
+    ],
+    rows: [
+      ["Theme 1", "Slow approvals on customer credits (6 mentions)"],
+      ["Action 1", "Weekly credit-approval slot · owner Mark · from Oct 26"],
+      ["Theme 2", "Unclear growth path (4 mentions)"],
+      ["Action 2", "Career conversation in each Q4 1:1 · owner Mark · by Nov 30"],
+      ["Reply to team", "“Thanks for the feedback. Here’s what we’re changing…”"],
+      ["Follow-up", "Same 3 questions on Nov 19"],
+    ],
+    chips: [{ text: "AI-suggested; you edit before anything is shared", tone: "info" }],
+    confirm: "Publish plan and reply",
+  },
+  checks: [
+    { label: "Anonymity", detail: "11 responses; themes and counts, no identifying quotes", tone: "ok" },
+    { label: "Ownership", detail: "Every action has an owner and a due date", tone: "ok" },
+    { label: "Commitments", detail: "Reply only promises what Mark owns", tone: "ok" },
+  ],
+  approvals: [],
+  exec: [
+    { system: "Action tracker", title: "Create actions", detail: "ACT-DEMO-001, ACT-DEMO-002 · owner Mark" },
+    { system: "Teams", title: "Post reply to team", detail: "Customer Success channel · 14 people" },
+    { system: "Survey service", title: "Schedule follow-up pulse", detail: "PULSE-DEMO-002 · Nov 19" },
+  ],
+  observer: { name: PERSONAS.E0007.name, initials: PERSONAS.E0007.initials, role: "People Operations · tracks action progress" },
+  done: "Plan published. Two actions are tracked with owners and dates, your team has your reply, and a follow-up pulse on Nov 19 will show whether workload improved.",
+  evidence: ["Two tracked actions, one team reply and one scheduled follow-up pulse.", "No real message was posted."],
+  branches: [
+    {
+      label: "Ask for verbatim comments",
+      prompt: "Paste me the exact comments about approvals.",
+      reply: "I show themes and counts, not quotes that could identify someone. People Operations can review anonymized text if it’s needed.",
+      event: "Verbatim comments withheld from manager",
+      tone: "deny",
+      sources: ["COMMS-001-v1.1-s04"],
+    },
+    {
+      label: "Ask to skip the reply",
+      prompt: "Do we need to tell the team anything?",
+      reply: "Telling people what changed shows their feedback was read. The draft is three lines, and you can edit it before it posts.",
+      event: "Close-the-loop reply recommended",
+      tone: "info",
+    },
+  ],
+};
+
+const S17: Scenario = {
+  id: "S17",
+  title: "Question to ticket",
+  domain: "IT",
+  pillar: "Automation",
+  mode: "answer",
+  useCase: "IT-UC08",
+  requester: "E0003",
+  minutes: "2 min",
+  steps: ["request", "policy", "answer", "handoff"],
+  prompt: "My VPN keeps disconnecting every few minutes.",
+  reply:
+    "There’s no VPN outage on the status page, so it’s likely your device. Try three safe checks: confirm your internet works, restart the approved VPN client and check your device clock. If it still drops, I’ll open a ticket with what you’ve tried so you don’t have to repeat it.",
+  sources: ["IT-002-v1.1-s04", "IT-002-v1.1-s02"],
+  card: {
+    title: "IT ticket · VPN keeps dropping",
+    record: `Service status · no active VPN incident ${ASOF}`,
+    rows: [
+      ["Category", "Network › VPN (auto-classified)"],
+      ["Severity", "P3 · degraded service"],
+      ["Target", "Acknowledge within 4 business hours"],
+      ["Queue", "IT service desk · network"],
+      ["Already tried", "Internet OK · client restarted · clock correct"],
+      ["Device", "ASSET-E0003 · DemoBook 14"],
+    ],
+    chips: [
+      { text: "Created from this chat", tone: "ok" },
+      { text: "Target is acknowledgment, not a fix time", tone: "info" },
+    ],
+    confirm: "Open ticket",
+  },
+  checks: [
+    { label: "Service status", detail: "No VPN outage reported", tone: "ok" },
+    { label: "Severity", detail: "Working but degraded → P3", tone: "ok" },
+    { label: "Safe steps", detail: "No disabling protection or unapproved tools", tone: "ok" },
+  ],
+  approvals: [],
+  exec: [],
+  handoff: {
+    queue: "IT service desk · network",
+    owner: QUEUES.itDesk,
+    caseId: "INC-DEMO-002",
+    priority: "P3",
+    nextStep: "IT acknowledges within four business hours. If nobody picks it up, it escalates to the network lead, then to the service owner.",
+  },
+  done: "Ticket INC-DEMO-002 is open as P3 with your checks attached. IT acknowledges within four business hours, and it escalates if that target is missed.",
+  evidence: ["Ticket auto-categorized and routed with the chat summary and steps already tried.", "SLA escalation simulated; no real ticket was created."],
+  branches: [
+    {
+      label: "Ask to turn off antivirus",
+      prompt: "Can I just turn off my antivirus to see if that fixes it?",
+      reply: "Please don’t. Disabling endpoint protection isn’t an approved fix. IT can look at it with you.",
+      event: "Disabling endpoint protection refused",
+      tone: "deny",
+      sources: ["IT-002-v1.1-s04"],
+    },
+    {
+      label: "Ask for P1",
+      prompt: "Make it P1 so it gets fixed faster.",
+      reply: "P1 is for active security compromise or broad outages. This is P3; IT confirms the severity and can raise it if things get worse.",
+      event: "Severity upgrade request left to IT",
+      tone: "info",
+      sources: ["IT-002-v1.1-s02"],
+    },
+  ],
+};
+
+const S18: Scenario = {
+  id: "S18",
+  title: "Exit and clearance",
+  domain: "HR",
+  pillar: "Automation",
+  mode: "transaction",
+  useCase: "HR-UC33",
+  requester: "E0007",
+  minutes: "3 min",
+  steps: ["request", "policy", "execute", "notify"],
+  prompt: "Start clearance for Ben Cruz. His approved last day is November 13.",
+  reply:
+    "Ben’s separation is approved in Workday with a last working day of Friday, November 13. I’ll create the clearance checklist: asset return, access removal at end of day, expense reconciliation and a final pay review, plus a confidential exit check-in.",
+  sources: ["HR-004-v1.1-s05", "IT-003-v1.1-s04"],
+  card: {
+    title: "Clearance · Ben Cruz (E0003)",
+    record: "Workday · SEP-DEMO-001 · People Operations view",
+    rows: [
+      ["Last day", "Fri Nov 13, 2026"],
+      ["Assets", "ASSET-E0003 laptop, Makati badge"],
+      ["Access", "Removed Nov 13, 18:00 PHT"],
+      ["Expenses", "1 open claim to reconcile"],
+      ["Final pay", "Payroll review in ADP"],
+      ["Exit check-in", "Mon Nov 9 · confidential"],
+    ],
+    chips: [{ text: "An unreturned laptop doesn’t hold back pay", tone: "info" }],
+    confirm: "Create clearance checklist",
+  },
+  checks: [
+    { label: "Separation", detail: "Approved in Workday; last day Nov 13", tone: "ok" },
+    { label: "Access", detail: "Removal uses the approved effective time", tone: "ok" },
+    { label: "Final pay", detail: "Equipment can’t automatically withhold pay", tone: "ok" },
+  ],
+  approvals: [],
+  exec: [
+    { system: "IT service desk", title: "Schedule access removal", detail: "IT-TASK-0002 · all accounts, Nov 13 18:00" },
+    { system: "IT service desk", title: "Create asset return task", detail: "IT-TASK-0003 · ASSET-E0003 and badge" },
+    { system: "Finance (ERP)", title: "Reconcile open claim", detail: "FIN-TASK-0001 · before final pay" },
+    { system: "ADP", title: "Queue final pay review", detail: "PAY-TASK-0001 · Payroll" },
+    { system: "Survey service", title: "Schedule exit check-in", detail: "EXIT-DEMO-001 · Nov 9, confidential" },
+  ],
+  observer: QUEUES.itDesk,
+  done: "Clearance checklist created for Ben with five tasks. Each team sees only its own task, and clearance stays open until every one is confirmed.",
+  evidence: ["Five clearance tasks created; access removal scheduled for the approved time.", "No real account, payment or message was changed."],
+  branches: [
+    {
+      label: "Ask to cut access today",
+      prompt: "Remove Ben’s access now, just in case.",
+      reply: "Access removal follows the approved effective time, Nov 13 at 18:00. If there’s a security concern, Security decides on earlier action.",
+      event: "Early revocation held; effective time kept",
+      tone: "hold",
+      sources: ["IT-003-v1.1-s04"],
+    },
+    {
+      label: "Ask to hold his final pay",
+      prompt: "Hold his final pay until the laptop is back.",
+      reply: "I can’t do that. Outstanding equipment doesn’t automatically authorize withholding pay; Payroll reviews the final settlement.",
+      event: "Pay withholding for unreturned equipment refused",
+      tone: "deny",
+      sources: ["HR-004-v1.1-s05"],
+    },
+  ],
+};
+
+const S19: Scenario = {
+  id: "S19",
+  title: "Office announcement",
+  domain: "Workplace",
+  pillar: "Communication",
+  mode: "draft",
+  useCase: "HR-UC42",
+  requester: "E0008",
+  minutes: "3 min",
+  steps: ["request", "policy", "draft", "approval", "execute", "notify"],
+  prompt: "Announce the Makati office closure on November 2 to Makati staff.",
+  reply:
+    "I drafted the announcement for Makati staff with location, date and source, plus a button to rebook desks. It goes out in Teams, email and WhatsApp. Nico has to approve it as publisher before anyone sees it.",
+  sources: ["COMMS-001-v1.1-s01", "WP-001-v1.1-s05"],
+  card: {
+    title: "Announcement · Makati office closed Nov 2",
+    record: `Workplace service · Makati headcount ${ASOF}`,
+    tiles: [
+      { value: "86", label: "Audience" },
+      { value: "3", label: "Channels" },
+      { value: "EN·FIL", label: "Languages" },
+    ],
+    rows: [
+      ["Audience", "Makati office · 86 people"],
+      ["Message", "Makati office is closed Mon Nov 2 for building maintenance. Please work from home."],
+      ["Source", "Workplace Services, Makati facilities notice"],
+      ["Button", "“Rebook my desk” opens Sydkyk"],
+      ["Channels", "Teams, email, WhatsApp (opted-in)"],
+      ["Sends", "Fri Oct 16, 10:00 PHT"],
+      ["Publisher", "Nico Mendoza"],
+    ],
+    chips: [{ text: "Nothing sends until the publisher approves", tone: "info" }],
+    confirm: "Send draft to publisher",
+  },
+  checks: [
+    { label: "Audience", detail: "Makati cohort only (86)", tone: "ok" },
+    { label: "Content", detail: "Location, date and source included", tone: "ok" },
+    { label: "Publisher", detail: "Broadcasts need publisher approval", tone: "ok" },
+  ],
+  submitted: "Sent to Nico. Nothing reaches staff until the publisher approves.",
+  approvals: [{ by: "E0007", role: "Publisher" }],
+  exec: [
+    { system: "Teams", title: "Post to Makati channel", detail: "86 people" },
+    { system: "Email", title: "Send email", detail: "86 inboxes" },
+    { system: "WhatsApp", title: "Send WhatsApp message", detail: "41 people who opted in" },
+    { system: "Workplace service", title: "Flag Nov 2 desk bookings", detail: "3 holders asked to rebook" },
+  ],
+  done: "Nico approved. The announcement went to 86 Makati staff in Teams and email, and to the 41 who opted in on WhatsApp. Reads and acknowledgments show on the campaign dashboard.",
+  evidence: ["One approved announcement to a single cohort across three channels.", "No real message was sent."],
+  branches: [
+    {
+      label: "Send it to the whole company",
+      prompt: "Actually, send it to the whole company.",
+      reply: "That’s a different audience, so it needs a new version and fresh publisher approval. Other offices aren’t affected by this closure.",
+      event: "Audience change requires new version and approval",
+      tone: "hold",
+      sources: ["COMMS-001-v1.1-s01"],
+    },
+    {
+      label: "Skip the approval",
+      prompt: "It’s urgent. Can you send it now without Nico?",
+      reply: "No. A chat request on its own doesn’t authorize a broadcast. I’ve flagged it to Nico as urgent.",
+      event: "Unapproved broadcast refused",
+      tone: "deny",
+      sources: ["COMMS-001-v1.1-s01"],
+    },
+  ],
+};
+
+const S20: Scenario = {
+  id: "S20",
+  title: "Nudge and engagement",
+  domain: "HR",
+  pillar: "Communication",
+  mode: "transaction",
+  useCase: "HR-UC28",
+  requester: "E0007",
+  minutes: "2 min",
+  steps: ["request", "policy", "execute", "notify"],
+  prompt: "Nudge new joiners who haven’t finished SEC101 and show me how it’s landing.",
+  reply:
+    "9 of 12 October joiners have completed SEC101 Security Basics. I can send a short reminder to the 3 who haven’t, with a button for the next session. The onboarding campaign so far: 11 of 12 opened it.",
+  sources: ["COMMS-001-v1.1-s05", "COMMS-001-v1.1-s02", "COMMS-001-v1.1-s06"],
+  card: {
+    title: "Nudge · SEC101 Security Basics",
+    record: `Learning records · October joiners ${ASOF}`,
+    tiles: [
+      { value: "12", label: "Joiners" },
+      { value: "11/12", label: "Opened" },
+      { value: "9/12", label: "Completed" },
+    ],
+    rows: [
+      ["Recipients", "3 joiners with SEC101 assigned and not completed"],
+      ["Message", "Reminder + “Join the Oct 20 session” button"],
+      ["Channel", "Each person’s preferred: Teams or WhatsApp"],
+      ["Style", "Quiet nudge · no manager copied"],
+      ["Next session", "SEC101 · Tue Oct 20, 14:00 PHT · 31 seats free"],
+      ["Repeat", "Once more on Oct 19 if still open"],
+    ],
+    chips: [{ text: "A reminder doesn’t mark anything complete", tone: "info" }],
+    confirm: "Send nudge",
+  },
+  checks: [
+    { label: "Recipients", detail: "Only joiners with the course assigned and not completed", tone: "ok" },
+    { label: "Status", detail: "Completion comes from the learning record, not the reminder", tone: "ok" },
+    { label: "Reporting", detail: "Opens and completions counted separately", tone: "ok" },
+  ],
+  approvals: [],
+  exec: [
+    { system: "Communications", title: "Send nudges", detail: "NUDGE-DEMO-001 · 3 sent" },
+    { system: "Communications", title: "Schedule repeat", detail: "Oct 19 · only if still not completed" },
+    { system: "Engagement dashboard", title: "Update campaign stats", detail: "Opened 11/12 · completed 9/12" },
+  ],
+  observer: { name: PERSONAS.E0010.name, initials: PERSONAS.E0010.initials, role: PERSONAS.E0010.role },
+  done: "Nudges sent to 3 joiners. Completion stays at 9 of 12 until the learning record confirms each one. I’ll nudge once more on Oct 19 and keep the dashboard updated.",
+  evidence: ["3 nudges sent; completion counts come only from learning records.", "No real message was sent."],
+  branches: [
+    {
+      label: "Ask to mark them complete",
+      prompt: "Just mark all three as complete.",
+      reply: "I can’t. Completion has to come from the learning record, not from a checklist or a reminder.",
+      event: "Completion without a verified record refused",
+      tone: "deny",
+      sources: ["COMMS-001-v1.1-s02"],
+    },
+    {
+      label: "Ask how much time it saved",
+      prompt: "How many hours did this save us?",
+      reply:
+        "Only as an estimate with its assumptions: 3 manual follow-ups at about 10 minutes each is roughly 30 minutes. That’s an estimate, not a measured result.",
+      event: "Time-saved shown as an estimate with assumptions",
+      tone: "info",
+      sources: ["COMMS-001-v1.1-s06"],
+    },
+  ],
+};
+
+export const SCENARIOS: Record<ScenarioId, Scenario> = {
+  S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20,
+};
+export const SCENARIO_ORDER = Object.keys(SCENARIOS) as ScenarioId[];
 
 export const MODE_LABEL: Record<Mode, string> = {
   transaction: "Mock transaction",
@@ -748,5 +1303,6 @@ export const MODE_LABEL: Record<Mode, string> = {
 };
 
 export const DOMAINS: Domain[] = ["HR", "IT", "Finance", "Workplace"];
+export const PILLARS: Pillar[] = ["Listening", "Automation", "Communication"];
 
 export const isScenarioId = (v: unknown): v is ScenarioId => typeof v === "string" && v in SCENARIOS;

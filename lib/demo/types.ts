@@ -1,10 +1,13 @@
 import type { SourceRef } from "@/lib/rag/types";
 import type { SourceId } from "./sources.generated";
 
-export type ScenarioId = "S01" | "S02" | "S03" | "S04" | "S05" | "S06" | "S07" | "S08" | "S09" | "S10" | "S11" | "S12";
+export type ScenarioId = "S01" | "S02" | "S03" | "S04" | "S05" | "S06" | "S07" | "S08" | "S09" | "S10" | "S11" | "S12" | "S13" | "S14" | "S15" | "S16" | "S17" | "S18" | "S19" | "S20";
 export type ChannelId = "teams" | "gchat" | "slack" | "mobile";
 export type PersonaId = "E0001" | "E0002" | "E0003" | "E0004" | "E0005" | "E0006" | "E0007" | "E0008" | "E0010";
 export type Domain = "HR" | "IT" | "Finance" | "Workplace";
+
+/** Product pillar: listening to employees, automating service requests, or communicating with them. */
+export type Pillar = "Listening" | "Automation" | "Communication";
 
 /** The four outcome types from the spec. Each scenario shows exactly one. */
 export type Mode = "transaction" | "answer" | "draft" | "handoff";
@@ -116,6 +119,7 @@ export interface Scenario {
   id: ScenarioId;
   title: string;
   domain: Domain;
+  pillar: Pillar;
   mode: Mode;
   useCase: string;
   requester: PersonaId;

@@ -124,6 +124,37 @@ describe("guardrail branches", () => {
   });
 });
 
+describe("listening, automation and communication journeys (S13–S20)", () => {
+  const approveAll = (id: ScenarioId): DemoAction[] => SCENARIOS[id].approvals.map(() => ({ type: "approve" }) as const);
+
+  it.each(["S13", "S14", "S15", "S16", "S17", "S18", "S19", "S20"] as const)("%s runs to done with every approval and step", (id) => {
+    const s = run([...open(id), { type: "confirm" }, ...approveAll(id), ...execAll(id)]).scenarios[id];
+    expect(s.stage).toBe("done");
+    expect(s.execDone).toBe(SCENARIOS[id].exec.length);
+    expect(s.decisions.map((d) => d.by)).toEqual(SCENARIOS[id].approvals.map((a) => a.by));
+    expect(s.chat.some((m) => m.text === SCENARIOS[id].done)).toBe(true);
+  });
+
+  it("S13 and S19 send nothing until People Operations approves", () => {
+    for (const id of ["S13", "S19"] as const) {
+      const s = run([...open(id), { type: "confirm" }]).scenarios[id];
+      expect(s.stage).toBe("approval");
+      expect(s.execDone).toBe(0);
+      expect(SCENARIOS[id].approvals[0].by).toBe("E0007");
+    }
+  });
+
+  it("S15 routes a sensitive concern to Employee Relations, never to a manager", () => {
+    const s = run([...open("S15"), { type: "confirm" }]).scenarios.S15;
+    expect(s.audit.some((a) => a.event.includes("ER-DEMO-002 → Employee Relations"))).toBe(true);
+    expect(SCENARIOS.S15.handoff?.owner.name).toBe(PERSONAS.E0004.name);
+  });
+
+  it("every journey is tagged with a pillar", () => {
+    for (const id of SCENARIO_ORDER) expect(["Listening", "Automation", "Communication"]).toContain(SCENARIOS[id].pillar);
+  });
+});
+
 describe("progress and switching", () => {
   it("answers stop at the answer step without a fake execution (S07)", () => {
     const s = run(open("S07")).scenarios.S07;

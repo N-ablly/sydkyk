@@ -6,15 +6,15 @@ This is a **front-end-only demo**. All data is fictional sample data, and no cha
 
 ## What the demo shows
 
-Three use cases, each running the same flow (request → policy check → human approval → execute → notify):
+Twenty scripted journeys, grouped by pillar and filterable in the left rail. Each one runs request → policy check → (approval) → execute or hand off → notify, with "Try this" guardrails.
 
-| Use case | Employee asks | Approver | Systems |
-| --- | --- | --- | --- |
-| Leave request | Leave balances + vacation request | Line manager | Darwinbox, Outlook calendar |
-| Reimbursement | ₱3,500 client dinner with receipt | Line manager | Receipt OCR, NetSuite |
-| IT access | Salesforce access for a new role | App owner | Entra ID, Salesforce, ServiceNow |
+| Pillar | Journeys |
+| --- | --- |
+| Automation | S01–S12 from the enterprise pack runbook (leave, COE, expenses, access, payslip, lost laptop, desk booking, onboarding, NTE draft, invoice match), S17 question → auto-categorized ticket with SLA escalation, S18 exit and clearance workflow |
+| Listening | S13 anonymous pulse survey to a cohort (10-person minimum), S14 people-to-meet 1:1 suggestions, S15 sensitive-feedback keyword alert routed to Employee Relations, S16 action plan from survey themes |
+| Communication | S19 cohort announcement across Teams, email and WhatsApp with publisher approval, S20 quiet nudge plus engagement stats |
 
-Each one can be shown in four channels: **Microsoft Teams**, **Google Chat**, **Slack** or the **Sydkyk mobile app**. In the mobile app view, both people use phones and get push notifications.
+Each one can be shown in four channels: **Microsoft Teams**, **Google Chat**, **Slack** or the **Sydkyk mobile app**.
 
 ## Run locally
 
@@ -47,17 +47,21 @@ npm run build
 ```
 app/
   layout.tsx            fonts (Manrope, DM Sans, JetBrains Mono) and metadata
-  page.tsx              renders the demo
+  page.tsx              landing page listing every journey
+  demo/page.tsx         renders the demo
   globals.css           brand tokens (light + dark) and all component styles
 components/demo/
   demo.tsx              header, scenario and channel switchers, presenter guide
   employee-pane.tsx     chat view (Teams / Google Chat / Slack / phone)
   approver-pane.tsx     approval console, execution steps, audit trail
-  request-forms.tsx     the editable request card for each use case
+  request-card.tsx      the request card for each journey
+  scenario-rail.tsx     scenario list with pillar and area filters
+  evidence-panel.tsx    guardrails, sources, outcome evidence, audit trail
   chrome.tsx            mascot, phone status bar, tab bar, push notification
 lib/demo/
   types.ts              domain types (scenarios, stages, audit entries)
-  scenarios.ts          the three use cases: copy, policy checks, execution steps
+  scenarios.ts          the 20 journeys: copy, policy checks, execution steps
+  sources.generated.ts  policy sections the journeys cite (from content/sydkyk-pack)
   channels.ts           channel labels
   reducer.ts            the whole flow as a pure reducer (tested)
   use-demo.ts           timers, push notifications, remembered tab/channel
@@ -65,9 +69,9 @@ lib/demo/
 
 ### Adding a use case
 
-1. Add its values type to `lib/demo/types.ts` and its id to `ScenarioId`.
-2. Define the scenario in `lib/demo/scenarios.ts` and add it to `SCENARIOS` and `SCENARIO_ORDER`.
-3. Add its request card to `FORMS` in `components/demo/request-forms.tsx`.
+1. Add its id to `ScenarioId` in `lib/demo/types.ts`.
+2. Define the scenario (with its `pillar`) in `lib/demo/scenarios.ts` and add it to `SCENARIOS`.
+3. Cite only policy sections listed in `lib/demo/sources.generated.ts`; add any new ones from `content/sydkyk-pack/chunks.jsonl`.
 
 ## Path to the real product
 

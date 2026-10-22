@@ -113,7 +113,7 @@ export function Demo({ initialScenario }: { initialScenario?: ScenarioId }) {
               <h2>{scenario.title}</h2>
               <span className={`mode m-${scenario.mode}`}>{MODE_LABEL[scenario.mode]}</span>
               <span className="meta">
-                {requester.name} · {scenario.domain} · {scenario.minutes}
+                {requester.name} · {scenario.pillar} · {scenario.domain} · {scenario.minutes}
               </span>
             </div>
             <div className="guide">
