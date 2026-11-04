@@ -67,6 +67,18 @@ lib/demo/
   use-demo.ts           timers, push notifications, remembered tab/channel
 ```
 
+### Google Chat app
+
+`app/api/google-chat/route.ts` lets a real Google Chat app answer with the same free-text logic as `/api/ask`.
+
+1. In Google Cloud, enable the Google Chat API and open its **Configuration** tab.
+2. Under **Connection settings** choose **HTTP endpoint URL** and enter `https://sydkyk.vercel.app/experience/api/google-chat`.
+3. Under **Authentication audience** choose **Project number** (stricter: only your project's Chat app can call it), and set `GOOGLE_CHAT_AUDIENCE` in Vercel to that project number. If you choose **HTTP endpoint URL** instead, set it to the URL above.
+4. If the app is built as a Google Workspace add-on, also set `GOOGLE_CHAT_SERVICE_ACCOUNT` to the add-on's service account.
+5. Redeploy. Requests without a valid Google token get 401; without `GOOGLE_CHAT_AUDIENCE` the endpoint returns 503.
+
+Answers use the persona of `GOOGLE_CHAT_SCENARIO` (default S01) and share the demo's daily question cap, plus 20 questions per Chat user every 10 minutes.
+
 ### Adding a use case
 
 1. Add its id to `ScenarioId` in `lib/demo/types.ts`.
