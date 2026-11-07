@@ -1,7 +1,9 @@
 export interface LeadRow {
   lead_id: string;
-  /** "experience" = demo sign-up at /experience; "website" = demo request on sydkyk.ai. */
-  source: "experience" | "website";
+  /** "experience" = demo sign-up at /experience; "website" = demo request on sydkyk.ai; "event" = event registration. */
+  source: "experience" | "website" | "event";
+  /** Which event an "event" row registered for, e.g. "compliance-workshop-2026-11-12". */
+  source_campaign: string | null;
   reference: string | null;
   notified_at: string | null;
   created_at: string;
@@ -35,6 +37,7 @@ const COLUMNS: (keyof LeadRow)[] = [
   "notice_version",
   "expires_at",
   "notified_at",
+  "source_campaign",
 ];
 
 /**

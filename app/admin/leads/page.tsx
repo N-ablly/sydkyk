@@ -10,6 +10,8 @@ import { currentAdmin } from "@/lib/supabase/server";
 import { signOut } from "../actions";
 import { BASE_PATH } from "@/lib/base-path";
 
+const SOURCE_LABEL: Record<string, string> = { experience: "Demo sign-up", website: "Website request", event: "Event registration" };
+
 const fmt = (iso: string) =>
   new Date(iso).toLocaleString("en-PH", { timeZone: "Asia/Manila", month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
 
@@ -86,9 +88,10 @@ async function LeadsTable() {
                 <tr key={l.lead_id}>
                   <td>{fmt(l.created_at)}</td>
                   <td>
-                    <span className={l.source === "website" ? "mode m-handoff" : "mode m-transaction"}>
-                      {l.source === "website" ? "Website request" : "Demo sign-up"}
+                    <span className={l.source === "experience" ? "mode m-transaction" : "mode m-handoff"}>
+                      {SOURCE_LABEL[l.source] ?? l.source}
                     </span>
+                    {l.source === "event" && l.source_campaign && <small>{l.source_campaign}</small>}
                     {l.reference && <small>{l.reference}</small>}
                   </td>
                   <td>{l.full_name}</td>
@@ -109,8 +112,8 @@ async function LeadsTable() {
         </div>
       )}
       <p className="meta">
-        Demo sign-ups are deleted automatically 90 days after their last visit. Website demo requests follow the website privacy
-        notice and are kept until you delete them.
+        Demo sign-ups are deleted automatically 90 days after their last visit. Website demo requests and event registrations follow
+        the website privacy notice and are kept until you delete them.
       </p>
     </main>
   );

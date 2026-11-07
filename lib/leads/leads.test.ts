@@ -60,6 +60,7 @@ describe("CSV export", () => {
     const row: LeadRow = {
       lead_id: "1",
       source: "website",
+      source_campaign: null,
       reference: "DEMO-ABC123",
       notified_at: null,
       created_at: "2026-10-19T00:00:00Z",
